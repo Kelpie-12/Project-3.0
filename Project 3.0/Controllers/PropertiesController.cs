@@ -10,6 +10,7 @@ namespace Project_3._0.Controllers
         [Route("{action}")]
         public IActionResult Index()
         {
+            ViewBag.Object = "Объекты";
             return View();
         }
         [HttpGet]
@@ -17,6 +18,7 @@ namespace Project_3._0.Controllers
         [Route("{action}")]
         public IActionResult PropertiesSingle(int? id)
         {
+            
             return View();
         }
     }

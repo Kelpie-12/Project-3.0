@@ -19,6 +19,14 @@ namespace Project_3._0
                                     .AsImplementedInterfaces()
                                     .SingleInstance();
             });
+            builder.Host.ConfigureContainer<ContainerBuilder>(cont =>
+            {
+                Assembly assembly = typeof(Program).Assembly;
+                cont.RegisterAssemblyTypes(assembly)
+                                    .Where(t => t.Name.EndsWith("Repository"))
+                                    .AsImplementedInterfaces()
+                                    .SingleInstance();
+            });
             var app = builder.Build();
 
             // app.MapGet("/", () => "Hello World!");
