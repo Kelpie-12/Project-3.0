@@ -1,4 +1,4 @@
-﻿@model List<Project_3._0.Model.Domain.Apartment>
+﻿@model Project_3._0.Model.View.HomePageView
 @using Project_3._0.Helpers.Html
 <body class="index-page">
 
@@ -10,44 +10,12 @@
 			<div id="hero-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
 				@{
 					bool first = true;
-				}
-				@for (int i = 0; i < 3; i++)
-				{
-					@Html.CarouselItem(Model[i], first)					
-					first = false;
-				}
-
-				@*    <div class="carousel-item active">
-                    <img src="assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
-                    <div class="carousel-container">
-                        <div>
-                            <p>Саратов</p>
-                            <h2><span>Ленина </span> 12 </h2>
-                            <a asp-controller="Properties" asp-action="PropertiesSingle" asp-route-id="1" class="btn-get-started">Цена | $ 12.000</a>
-                        </div>
-                    </div>
-                </div> *@<!-- End Carousel Item -->
-				@* <div class="carousel-item">
-                    <img src="assets/img/hero-carousel/hero-carousel-2.jpg" alt="">
-                    <div class="carousel-container">
-                        <div>
-                            <p>Doral, Florida</p>
-                            <h2><span>247</span> Venda Road Five</h2>
-                            <a asp-controller="Properties" asp-action="PropertiesSingle" asp-route-id="1" class="btn-get-started">sale | $ 356.000</a>
-                        </div>
-                    </div>
-                </div><!-- End Carousel Item -->
-
-                <div class="carousel-item">
-                    <img src="assets/img/hero-carousel/hero-carousel-3.jpg" alt="">
-                    <div class="carousel-container">
-                        <div>
-                            <p>Doral, Florida</p>
-                            <h2><span>247</span> Vitra Road three</h2>
-                            <a href="property-single.html" class="btn-get-started">rent | $ 3.000</a>
-                        </div>
-                    </div>
-                </div><!-- End Carousel Item --> *@
+					for (int i = 0; i < 3; i++)
+					{
+						@Html.HomePageApartment(Model.Apartments[i], first)
+						first = false;
+					}
+				}		
 
 				<a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
 					<span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
@@ -168,55 +136,13 @@
 
 				<div class="row gy-5">
 
-					@Html.HomePageAgets()
-					@* <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-						<div class="member">
-							<div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
-							<div class="member-info">
-								<h4>Walter White</h4>
-								<span>Chief Executive Officer</span>
-								<div class="social">
-									<a href=""><i class="bi bi-twitter-x"></i></a>
-									<a href=""><i class="bi bi-facebook"></i></a>
-									<a href=""><i class="bi bi-instagram"></i></a>
-									<a href=""><i class="bi bi-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div> *@<!-- End Team Member -->
-
-					<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-						<div class="member">
-							<div class="pic"><img src="assets/img/team/team-2.jpg" class="img-fluid" alt=""></div>
-							<div class="member-info">
-								<h4>Sarah Jhonson</h4>
-								<span>Rent Manager</span>
-								<div class="social">
-									<a href=""><i class="bi bi-twitter-x"></i></a>
-									<a href=""><i class="bi bi-facebook"></i></a>
-									<a href=""><i class="bi bi-instagram"></i></a>
-									<a href=""><i class="bi bi-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div><!-- End Team Member -->
-
-					<div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-						<div class="member">
-							<div class="pic"><img src="assets/img/team/team-3.jpg" class="img-fluid" alt=""></div>
-							<div class="member-info">
-								<h4>William Anderson</h4>
-								<span>Sale manager<br></span>
-								<div class="social">
-									<a href=""><i class="bi bi-twitter-x"></i></a>
-									<a href=""><i class="bi bi-facebook"></i></a>
-									<a href=""><i class="bi bi-instagram"></i></a>
-									<a href=""><i class="bi bi-linkedin"></i></a>
-								</div>
-							</div>
-						</div>
-					</div><!-- End Team Member -->
-
+					@{
+						foreach (var item in Model.Agents)
+						{
+							@Html.HomePageAgets(item)
+						}
+					}
+					@**@
 				</div>
 
 			</div>
@@ -227,8 +153,8 @@
 
 			<!-- Section Title -->
 			<div class="container section-title" data-aos="fade-up">
-				<h2>Testimonials</h2>
-				<p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+				<h2>Отзывы</h2>
+				<p>Мы всегда просим клиентов оставлять честные отзывы про нас</p>
 			</div><!-- End Section Title -->
 
 			<div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -260,88 +186,16 @@
 						}
 					</script>
 					<div class="swiper-wrapper">
-
-						<div class="swiper-slide">
-							<div class="testimonial-item">
-								<div class="stars">
-									<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-								</div>
-								<p>
-									Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-								</p>
-								<div class="profile mt-auto">
-									<img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-									<h3>Saul Goodman</h3>
-									<h4>Ceo &amp; Founder</h4>
-								</div>
-							</div>
-						</div><!-- End testimonial item -->
-
-						<div class="swiper-slide">
-							<div class="testimonial-item">
-								<div class="stars">
-									<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-								</div>
-								<p>
-									Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-								</p>
-								<div class="profile mt-auto">
-									<img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-									<h3>Sara Wilsson</h3>
-									<h4>Designer</h4>
-								</div>
-							</div>
-						</div><!-- End testimonial item -->
-
-						<div class="swiper-slide">
-							<div class="testimonial-item">
-								<div class="stars">
-									<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-								</div>
-								<p>
-									Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-								</p>
-								<div class="profile mt-auto">
-									<img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-									<h3>Jena Karlis</h3>
-									<h4>Store Owner</h4>
-								</div>
-							</div>
-						</div><!-- End testimonial item -->
-
-						<div class="swiper-slide">
-							<div class="testimonial-item">
-								<div class="stars">
-									<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-								</div>
-								<p>
-									Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-								</p>
-								<div class="profile mt-auto">
-									<img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-									<h3>Matt Brandon</h3>
-									<h4>Freelancer</h4>
-								</div>
-							</div>
-						</div><!-- End testimonial item -->
-
-						<div class="swiper-slide">
-							<div class="testimonial-item">
-								<div class="stars">
-									<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-								</div>
-								<p>
-									Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-								</p>
-								<div class="profile mt-auto">
-									<img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
-									<h3>John Larson</h3>
-									<h4>Entrepreneur</h4>
-								</div>
-							</div>
-						</div><!-- End testimonial item -->
+						@{
+							foreach (var item in Model.Reviews)
+							{
+								@Html.HomePageReview(item)
+							}
+						}					
+						
 
 					</div>
+
 					<div class="swiper-pagination"></div>
 				</div>
 

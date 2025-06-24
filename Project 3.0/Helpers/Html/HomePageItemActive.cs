@@ -1,17 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text.Encodings.Web;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Routing;
 using Project_3._0.Model.Domain;
 
 namespace Project_3._0.Helpers.Html
@@ -28,7 +16,7 @@ namespace Project_3._0.Helpers.Html
         //      </div>
         //  </div>
         //</div>
-        public static HtmlString CarouselItem(this IHtmlHelper helper, Apartment apartment, bool active = false)
+        public static HtmlString HomePageApartment(this IHtmlHelper helper, Apartment apartment, bool active = false)
         {
             TagBuilder div = new TagBuilder("div");
             if (active)
@@ -59,19 +47,11 @@ namespace Project_3._0.Helpers.Html
             h2.InnerHtml.Append(apartment.House.ToString());
             TagBuilder span = new TagBuilder("span");
             span.InnerHtml.Append(apartment.Street);
-            h2.InnerHtml.AppendHtml(span);
-
-
-            TagBuilder a = new TagBuilder("a");
-            //string _a = $"/Properties/PropertiesSingle?id={apartment.ObjectId}";
-            //a.Attributes.Add("href", _a /*new UriBuilder("https", "localhost", 7503, "Properties/PropertiesSingle").ToString()*/);
-            //a.Attributes.Add("class", "btn-get-started");
-            //a.InnerHtml.Append($"Цена | {apartment.Price}");
-            a.InnerHtml.AppendHtml(helper.RouteLink($"Цена | {apartment.Price}", new { action = "PropertiesSingle", controller = "Properties", id = apartment.ObjectId }, new { @class = "btn-get-started" }));
+            h2.InnerHtml.AppendHtml(span);       
 
             d.InnerHtml.AppendHtml(p);
             d.InnerHtml.AppendHtml(h2);
-            d.InnerHtml.AppendHtml(a);
+            d.InnerHtml.AppendHtml(helper.RouteLink($"Цена | {apartment.Price}", new { action = "ObjectsSingle", controller = "Objects", id = apartment.Id }, new { @class = "btn-get-started" }));
 
 
             div.InnerHtml.AppendHtml(d);
@@ -96,20 +76,20 @@ namespace Project_3._0.Helpers.Html
         //	</div>
         //</div>
 
-        public static HtmlString HomePageAgets(this IHtmlHelper helper)
+        public static HtmlString HomePageAgets(this IHtmlHelper helper, Agent agent)
         {
             TagBuilder div = new TagBuilder("div");
             div.MergeAttribute("class", "col-lg-4 col-md-6");
             div.MergeAttribute("data-aos", "fade-up");
             div.MergeAttribute("data-aos-delay", "100");
-            div.InnerHtml.AppendHtml(DivClassMember(helper));
+            div.InnerHtml.AppendHtml(DivClassMember(helper, ref agent));
             using (var writter = new StringWriter())
             {
                 div.WriteTo(writter, System.Text.Encodings.Web.HtmlEncoder.Default);
                 return new HtmlString(writter.ToString());
             }
         }
-        private static TagBuilder DivClassMember(this IHtmlHelper helper)
+        private static TagBuilder DivClassMember(this IHtmlHelper helper, ref Agent agent)
         {
             TagBuilder div = new TagBuilder("div");
             div.MergeAttribute("class", "member");
@@ -123,13 +103,13 @@ namespace Project_3._0.Helpers.Html
 
             TagBuilder meb = new TagBuilder("div");
             meb.Attributes.Add("class", "member-info");
-            TagBuilder h4 = new TagBuilder("h4"); h4.InnerHtml.Append("Имя агента");
+            TagBuilder h4 = new TagBuilder("h4"); h4.InnerHtml.Append($"{agent.FirstName} {agent.LastName}");
             meb.InnerHtml.AppendHtml(h4);
             TagBuilder span = new TagBuilder("span"); span.InnerHtml.Append("должность агента");
             meb.InnerHtml.AppendHtml(span);
 
             TagBuilder social = new TagBuilder("div");
-            social.Attributes.Add("class","social");
+            social.Attributes.Add("class", "social");
             TagBuilder a = new TagBuilder("a"); a.Attributes.Add("href", "ссылка на агента");
             TagBuilder i = new TagBuilder("i"); i.Attributes.Add("class", "bi bi-instagram");
             a.InnerHtml.AppendHtml(i);
@@ -143,6 +123,78 @@ namespace Project_3._0.Helpers.Html
 
             div.InnerHtml.AppendHtml(pic);
             div.InnerHtml.AppendHtml(meb);
+
+            return div;
+        }
+
+        //<div class="swiper-slide">
+        //	 <div class="testimonial-item">
+        //	 	<div class="stars">
+        //	 		<i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+        //	 	</div>
+        //	 	<p>
+        //	 		Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus.Accusantium quam, ultricies eget id, aliquam eget nibh et.Maecen aliquam, risus at semper.
+        //   
+        //                     </p>
+        //	 	<div class="profile mt-auto">
+        //	 		<img src = "assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+        //	 		<h3>Saul Goodman</h3>
+        //	 		<h4>Ceo &amp; Founder</h4>
+        //	 	</div>
+        //	 </div>
+        //</div>
+        public static HtmlString HomePageReview(this IHtmlHelper helper,Review review)
+        {
+            TagBuilder div = new TagBuilder("div");
+            div.MergeAttribute("class", "swiper-slide");
+            div.InnerHtml.AppendHtml(ReviewItem(helper,review));
+            using (var writter = new StringWriter())
+            {
+                div.WriteTo(writter, System.Text.Encodings.Web.HtmlEncoder.Default);
+                return new HtmlString(writter.ToString());
+            }
+        }
+        private static TagBuilder ReviewItem(this IHtmlHelper helper, Review review)
+        {
+            TagBuilder div = new TagBuilder("div");
+            div.MergeAttribute("class", "testimonial-item");
+
+            TagBuilder stars = new TagBuilder("div");
+            stars.MergeAttribute("class", "stars");
+            for (int i = 0; i < review.Mark; i++)
+            {
+                TagBuilder s = new TagBuilder("i");
+                s.MergeAttribute("class", "bi bi-star-fill");
+                stars.InnerHtml.AppendHtml(s);
+            }
+
+            TagBuilder p = new TagBuilder("p");
+            p.InnerHtml.Append($"{review.Text}");
+            TagBuilder data = new TagBuilder("p");
+            data.InnerHtml.Append($"{review.Date.ToShortDateString()}");
+
+            TagBuilder profil = new TagBuilder("div");
+            profil.MergeAttribute("class", "profile mt-auto");
+
+            TagBuilder img = new TagBuilder("img");
+            img.MergeAttribute("class", "testimonial-img");
+            img.MergeAttribute("src", "Ссылка на фото");
+            img.MergeAttribute("alt", "");
+
+            TagBuilder h3 = new TagBuilder("h3");
+            h3.InnerHtml.Append($"{review.FirstName} {review.LastName}");
+            TagBuilder h4 = new TagBuilder("h4");
+            h4.InnerHtml.Append(review.JobTitle);
+
+            profil.InnerHtml.AppendHtml(img);
+            profil.InnerHtml.AppendHtml(h3);
+            profil.InnerHtml.AppendHtml(h4);
+
+
+            div.InnerHtml.AppendHtml(stars);
+            div.InnerHtml.AppendHtml(p);
+            div.InnerHtml.AppendHtml(data);
+            div.InnerHtml.AppendHtml(profil);
 
             return div;
         }

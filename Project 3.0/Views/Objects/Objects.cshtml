@@ -1,4 +1,7 @@
-﻿<body class="properties-page">
+﻿@model List<Project_3._0.Model.Domain.Object>
+
+@using Project_3._0.Helpers.Html
+<body class="properties-page">
 	<main class="main">
 
 		<!-- Page Title -->
@@ -16,7 +19,7 @@
 			<nav class="breadcrumbs">
 				<div class="container">
 					<ol>
-						<li><a asp-controller="Home" asp-action="Home">Home</a></li>
+						<li><a asp-controller="Home" asp-action="Home">Главная страница</a></li>
 						<li class="current">@ViewBag.Object</li>
 					</ol>
 				</div>
@@ -29,7 +32,16 @@
 
 				<div class="row gy-4">
 
-					<div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+					@{
+						for (int i = 0; i < Model.Count ; i++)
+						{
+							//new Project_3._0.Model.Domain.Object() { Id = 3, Citi = "London", Street = "Time Scver", House = 12, Apartment = 4, Floor = 2, AreaHouse = 45, Rooms = 2, Price = 123456, Desc = "" }
+							@Html.ObjectItem(Model[i], (i+1) * 100)
+						}
+					}
+
+
+					@* <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
 						<div class="card">
 							<img src="assets/img/properties/property-1.jpg" alt="" class="img-fluid">
 							<div class="card-body">
@@ -51,9 +63,9 @@
 								</div>
 							</div>
 						</div>
-					</div><!-- End Property Item -->
+					</div> *@<!-- End Property Item -->
 
-					<div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+					@* 					<div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
 						<div class="card">
 							<img src="assets/img/properties/property-2.jpg" alt="" class="img-fluid">
 							<div class="card-body">
@@ -172,7 +184,7 @@
 							</div>
 						</div>
 					</div><!-- End Property Item -->
-
+ *@
 				</div>
 
 			</div>
