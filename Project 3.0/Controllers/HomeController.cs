@@ -23,7 +23,7 @@ namespace Project_3._0.Controllers
         [Route("/")]
         public IActionResult Index()
         {
-            List<Apartment> apartments = _apartmentServices.GetAll();
+            List<Apartment> apartments = _apartmentServices.GetTop();
             List<Agent> agents = _agentsRepository.GetAgents();
             List<Review> reviews = _reviewRepository.GetAll();
 

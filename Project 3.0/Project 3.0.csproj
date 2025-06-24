@@ -12,4 +12,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\src\Photo\1068-1.jpeg" />
+    <None Include="wwwroot\src\Photo\1068-2.jpeg" />
+    <None Include="wwwroot\src\Photo\1068-3.jpeg" />
+  </ItemGroup>
+
 </Project>

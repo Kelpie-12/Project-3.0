@@ -6,5 +6,6 @@ namespace Project_3._0.Services
     {
         List<Apartment> GetAll();
         Apartment? GetById(int id);
+        List<Apartment> GetTop();
     }
 }

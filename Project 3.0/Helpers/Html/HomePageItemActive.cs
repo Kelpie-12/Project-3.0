@@ -25,7 +25,7 @@ namespace Project_3._0.Helpers.Html
                 div.Attributes.Add("class", "carousel-item ");
 
             TagBuilder img = new TagBuilder("img");
-            img.Attributes.Add("src", "");
+            img.Attributes.Add("src", apartment.Photo[0].Path);
             div.InnerHtml.AppendHtml(img);
             div.InnerHtml.AppendHtml(CarouselContainer(helper, apartment));
             using (var writter = new StringWriter())

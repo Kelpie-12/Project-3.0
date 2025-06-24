@@ -6,5 +6,6 @@ namespace Project_3._0.Data.Repositories
     {
         List<Apartment> GetAll();
         Apartment? GetById(int id);
+        List<Apartment> GetTop();
     }
 }

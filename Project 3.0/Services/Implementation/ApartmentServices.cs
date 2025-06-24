@@ -19,5 +19,10 @@ namespace Project_3._0.Services.Implementation
         {
             return _apartmentRepository.GetById(id);
         }
+
+        public List<Apartment> GetTop()
+        {
+            return _apartmentRepository.GetTop();
+        }
     }
 }

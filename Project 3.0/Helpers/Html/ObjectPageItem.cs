@@ -50,12 +50,19 @@ namespace Project_3._0.Helpers.Html
 
                 TagBuilder img = new TagBuilder("img");
                 img.MergeAttribute("class", "img-fluid");
-                img.MergeAttribute("src", "источник");
+                if (obj.Photo.Count>0)
+                {
+                img.MergeAttribute("src", obj.Photo[0].Path);
+                }
+                else
+                {
+                    img.MergeAttribute("src", "");
+                }
 
 
 
 
-                TagBuilder span = new TagBuilder("span");
+                    TagBuilder span = new TagBuilder("span");
                 span.MergeAttribute("class", "sale-rent");
                 span.InnerHtml.Append($"Цена | {obj.Price}");
 
