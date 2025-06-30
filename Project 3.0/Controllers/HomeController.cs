@@ -3,6 +3,7 @@ using Project_3._0.Data.Repositories;
 using Project_3._0.Model.Domain;
 using Project_3._0.Model.View;
 using Project_3._0.Services;
+using Project_3._0.Services.Implementation;
 
 namespace Project_3._0.Controllers
 {
@@ -10,13 +11,13 @@ namespace Project_3._0.Controllers
     public class HomeController : Controller
     {
         private readonly IApartmentServices _apartmentServices;
-        private readonly IAgentsRepository _agentsRepository;
-        private readonly IReviewRepository _reviewRepository;
-        public HomeController(IApartmentServices apartmentServices, IAgentsRepository agentsRepository, IReviewRepository reviewRepository)
+        private readonly IAgentServices _agentServices;
+        private readonly IReviewServices _reviewServices;
+        public HomeController(IApartmentServices apartmentServices, IAgentServices agentServices, IReviewServices reviewServices)
         {
             _apartmentServices = apartmentServices;
-            _agentsRepository = agentsRepository;
-            _reviewRepository = reviewRepository;
+            _agentServices = agentServices;
+            _reviewServices = reviewServices;
         }
         [HttpGet]
         [ActionName("Home")]
@@ -24,8 +25,8 @@ namespace Project_3._0.Controllers
         public IActionResult Index()
         {
             List<Apartment> apartments = _apartmentServices.GetTop();
-            List<Agent> agents = _agentsRepository.GetAgents();
-            List<Review> reviews = _reviewRepository.GetAll();
+            List<Agent> agents = _agentServices.GetAll();
+            List<Review> reviews = _reviewServices.GetAll();
 
             HomePageView view = new HomePageView()
             {

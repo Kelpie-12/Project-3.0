@@ -69,7 +69,8 @@ namespace Project_3._0.Data.Repositories.Implementations
                             {
                                 Id = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
-                                LastName = reader.GetString(2)
+                                LastName = reader.GetString(2),
+                                Photo=reader.GetString(3)??""
                             };
                             agents.Add(agent);
                         }

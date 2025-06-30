@@ -41,13 +41,13 @@
                     <li><a asp-controller="Home" asp-action="Home" class="active">Главная страница</a></li>
                     <li><a asp-controller="About" asp-action="About" >О нас</a></li>
                     <li><a asp-controller="Services" asp-action="Services" >Наши услуги</a></li>
-                    <li><a asp-controller="Objects" asp-action="Objects">Объекты</a></li>
-                    <li><a asp-controller="Agents" asp-action="Agents">Агенты</a></li>
+                    @* <li><a >Объекты</a></li> *@
+                   
                     <li class="dropdown">
-                        <a href="#"><span>Какое-то меню</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <a href="#"><span>Объекты</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                         <ul>
-                            <li><a href="#">Какое-то меню</a></li>
-                            <li class="dropdown">
+                            <li><a asp-controller="Objects" asp-action="Objects" asp-route-objectType="0">Новостройки</a></li>
+                         @*    <li class="dropdown">
                                 <a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                                 <ul>
                                     <li><a href="#">Deep Dropdown 1</a></li>
@@ -56,13 +56,13 @@
                                     <li><a href="#">Deep Dropdown 4</a></li>
                                     <li><a href="#">Deep Dropdown 5</a></li>
                                 </ul>
-                            </li>
-                            <li><a href="#">Dropdown 2</a></li>
-                            <li><a href="#">Dropdown 3</a></li>
-                            <li><a href="#">Dropdown 4</a></li>
+                            </li> *@
+                            <li><a asp-controller="Objects" asp-action="Objects" asp-route-objectType="1">Вторичное жилье</a></li>
+                            <li><a href="#">Дома, Дачи, Котеджи</a></li>                            
                         </ul>
                     </li>
-                    <li><a href="contact.html">Контакты</a></li>
+                    <li><a asp-controller="Agents" asp-action="Agents">Агенты</a></li>
+                    <li><a asp-controller="Contacts" asp-action="Contacts">Контакты</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

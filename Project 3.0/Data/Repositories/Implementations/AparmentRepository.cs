@@ -11,7 +11,7 @@ namespace Project_3._0.Data.Repositories.Implementations
         {
         }
 
-        public List<Apartment> GetAll()
+        public List<Apartment> GetAll(bool brandNew)
         {
             List<Apartment> apartments = new List<Apartment>();
             using (SqlConnection con = CreateConnection())
@@ -25,6 +25,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                     cmd.CommandText = $"get_objects_apartments_all_by_view";
                     cmd.Parameters.Add(new SqlParameter("@archive", 1));
                     cmd.Parameters.Add(new SqlParameter("@offer", 1));
+                    cmd.Parameters.Add(new SqlParameter("@new", brandNew));
 
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -46,6 +47,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                                 AreaHouse = reader.GetInt32(9),
                                 Rooms = reader.GetInt32(10),
                                 Price = reader.GetDecimal(11),
+                                //BrandNew= reader.GetBoolean(12),
                                 Desc = "",
                                 //Description = new Description()
                                 //{

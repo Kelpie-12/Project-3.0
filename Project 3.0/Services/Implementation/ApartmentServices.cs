@@ -10,9 +10,9 @@ namespace Project_3._0.Services.Implementation
         {
             _apartmentRepository = apartmentRepository;
         }
-        public List<Apartment> GetAll()
+        public List<Apartment> GetAll(bool brandNew)
         {
-            return _apartmentRepository.GetAll();
+            return _apartmentRepository.GetAll(brandNew);
         }
 
         public Apartment? GetById(int id)

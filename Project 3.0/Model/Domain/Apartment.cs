@@ -11,6 +11,7 @@
         public int Floor { get; set; }
         public int AreaHouse { get; set; }
         public int Rooms { get; set; }
+        public bool BrandNew { get; set; }
         public decimal Price { get; set; }
         public Description? Description { get; set; }
         public List<Photo>? Photo { get; set; }

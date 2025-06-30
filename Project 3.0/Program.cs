@@ -27,12 +27,22 @@ namespace Project_3._0
                                     .AsImplementedInterfaces()
                                     .SingleInstance();
             });
-            var app = builder.Build();
 
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(1800);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            var app = builder.Build();
             // app.MapGet("/", () => "Hello World!");
             // app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.UseStaticFiles();
             app.MapControllers();
+            app.UseSession();
+           
 
             app.Run();
         }

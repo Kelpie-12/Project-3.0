@@ -4,7 +4,7 @@ namespace Project_3._0.Services
 {
     public interface IApartmentServices
     {
-        List<Apartment> GetAll();
+        List<Apartment> GetAll(bool brandNew);
         Apartment? GetById(int id);
         List<Apartment> GetTop();
     }

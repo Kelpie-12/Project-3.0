@@ -11,6 +11,12 @@ namespace Project_3._0.Services.Implementation
         {
             _reviewRepository = reviewRepository;
         }
+
+        public List<Review> GetAll()
+        {
+            return _reviewRepository.GetAll();
+        }
+
         public Review GetReviewsByAgentId(int id)
         {
             return _reviewRepository.GetReviewAgentById(id);

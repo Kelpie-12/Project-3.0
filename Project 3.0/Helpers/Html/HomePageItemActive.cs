@@ -98,7 +98,7 @@ namespace Project_3._0.Helpers.Html
             pic.Attributes.Add("class", "pic");
             TagBuilder img = new TagBuilder("img");
             img.Attributes.Add("class", "img-fluid");
-            img.Attributes.Add("src", "");
+            img.Attributes.Add("src", agent.Photo);
             pic.InnerHtml.AppendHtml(img);
 
             TagBuilder meb = new TagBuilder("div");
