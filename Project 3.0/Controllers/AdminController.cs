@@ -26,10 +26,15 @@ namespace Project_3._0.Controllers
 
         [HttpPost]
         [Route("{action}")]
-        public IActionResult LogIn(string login,string pass)
+        public IActionResult LogIn(string login, string pass)
         {
+            if (login == string.Empty && pass == string.Empty)
+            {
+                ViewBag.Error = "Некорректный логин или пароль";
+                return View("~/Views/Admin/Login.cshtml");
+            }
             User res = _userServices.Authorize(login, pass);
-            if (res==null)
+            if (res == null)
             {
                 ViewBag.Error = "Некорректный логин или пароль";
                 return View("~/Views/Admin/Login.cshtml");
@@ -38,7 +43,7 @@ namespace Project_3._0.Controllers
             HttpContext.Session.SetString("UserLastName", res.LastName);
             HttpContext.Session.SetInt32("UserPosition", res.Position);
             HttpContext.Session.SetInt32("UserId", res.IdUser);
-            
+
 
 
             return RedirectToAction("Dashboard");
@@ -50,7 +55,10 @@ namespace Project_3._0.Controllers
         {
             //ViewBag.UserName = $"{HttpContext.Session.Keys.Contains("UserFirstName")}";
             //Console.WriteLine($"{context.Request.Cookies[".AspNetCore.Session"]}");
-            
+
+            Console.WriteLine($"{HttpContext.Request.Cookies[".AspNetCore.Session"].Contains("UserFirstName")}");
+            Console.WriteLine($"{HttpContext.Session.GetString("UserFirstName")}");
+
             return View();
         }
     }

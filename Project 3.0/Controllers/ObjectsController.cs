@@ -25,7 +25,8 @@ namespace Project_3._0.Controllers
         [Route("{action}")]
         public IActionResult Index(int objectType, List<Project_3._0.Model.Domain.Object> objects)
         {
-            if (objectType == 0)
+            //реализовать еnum
+            if (objectType == 0 )
             {
                 foreach (Apartment item in _apartmentServices.GetAll(true))
                 {

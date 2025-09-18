@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Data.SqlClient;
+using System.Globalization;
 using Project_3._0.Model.Domain;
 
 namespace Project_3._0.Data.Repositories.Implementations
@@ -9,6 +10,23 @@ namespace Project_3._0.Data.Repositories.Implementations
     {
         public AparmentRepository(IConfiguration configuration) : base(configuration)
         {
+        }
+        private List<Photo> GetPhotos(string directoryPath)
+        {
+            List<Photo> tmp = new List<Photo>();
+            var dir = Directory.GetCurrentDirectory();
+            dir += "\\wwwroot" + directoryPath;
+           //dir = dir.Substring(0, dir.Length - 10);
+            DirectoryInfo directoryInfo = new DirectoryInfo(dir);
+            foreach (var file in directoryInfo.GetFiles()) //проходим по файлам
+            {                
+               // if (Path.GetExtension(file.FullName) == "jpg" || Path.GetExtension(file.FullName) == "png"|| Path.GetExtension(file.FullName) == "jpeg")
+               // {                  
+                    tmp.Add(new Photo() { Id = 0, ObjectId = 0, Path = directoryPath+"\\"+ file.Name });
+               // }
+            }
+
+            return tmp;
         }
 
         public List<Apartment> GetAll(bool brandNew)
@@ -47,6 +65,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                                 AreaHouse = reader.GetInt32(9),
                                 Rooms = reader.GetInt32(10),
                                 Price = reader.GetDecimal(11),
+                                PathPhoto= reader.GetString(12),
                                 //BrandNew= reader.GetBoolean(12),
                                 Desc = "",
                                 //Description = new Description()
@@ -64,28 +83,31 @@ namespace Project_3._0.Data.Repositories.Implementations
                     reader.Close();
 
                 }
-
                 for (int i = 0; i < apartments.Count; i++)
                 {
-                    using (SqlCommand cmd = con.CreateCommand())
-                    {
-
-                        cmd.Connection = con;
-                        //cmd.CommandType = System.Data.CommandType.Text;
-                        cmd.CommandType = System.Data.CommandType.Text;
-                        cmd.CommandText = $"SELECT top(1) [Photo] FROM [Photo] where ObjectId=@id ";
-                        cmd.Parameters.Add(new SqlParameter("@id", apartments[i].Id));
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                apartments[i].Photo.Add(new Photo() { Path = reader.GetString(0) });
-                            }
-                        }
-                        reader.Close();
-                    }
+                    apartments[i].Photo = GetPhotos(apartments[i].PathPhoto);
                 }
+                //for (int i = 0; i < apartments.Count; i++)
+                //{
+                //    using (SqlCommand cmd = con.CreateCommand())
+                //    {
+
+                //        cmd.Connection = con;
+                //        //cmd.CommandType = System.Data.CommandType.Text;
+                //        cmd.CommandType = System.Data.CommandType.Text;
+                //        cmd.CommandText = $"SELECT top(1) [Photo] FROM [Photo] where ObjectId=@id ";
+                //        cmd.Parameters.Add(new SqlParameter("@id", apartments[i].Id));
+                //        SqlDataReader reader = cmd.ExecuteReader();
+                //        if (reader.HasRows)
+                //        {
+                //            while (reader.Read())
+                //            {
+                //                apartments[i].Photo.Add(new Photo() { Path = reader.GetString(0) });
+                //            }
+                //        }
+                //        reader.Close();
+                //    }
+                //}
             }
 
             return apartments;
@@ -133,30 +155,33 @@ namespace Project_3._0.Data.Repositories.Implementations
                                     Paragraph_1 = reader.GetString(13),
                                     Paragraph_2 = reader.GetString(14),
                                     Paragraph_3 = reader.GetString(15)
-                                }
+                                },
+                                PathPhoto=reader.GetString(16)
+                                
                             };
                         }
                     }
                     reader.Close();
 
                 }
-                apartment.Photo = new List<Photo>();
-                using (SqlCommand cmd = con.CreateCommand())
-                {
-                    cmd.Connection = con;
-                    //cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.CommandText = $"SELECT [Photo] FROM [Photo] where ObjectId=@id ";
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            apartment.Photo.Add(new Photo() { Path = reader.GetString(0) });
-                        }
-                    }
-                }
+                apartment.Photo = GetPhotos(apartment.PathPhoto);
+              
+                //using (SqlCommand cmd = con.CreateCommand())
+                //{
+                //    cmd.Connection = con;
+                //    //cmd.CommandType = System.Data.CommandType.Text;
+                //    cmd.CommandType = System.Data.CommandType.Text;
+                //    cmd.CommandText = $"SELECT [Photo] FROM [Photo] where ObjectId=@id ";
+                //    cmd.Parameters.Add(new SqlParameter("@id", id));
+                //    SqlDataReader reader = cmd.ExecuteReader();
+                //    if (reader.HasRows)
+                //    {
+                //        while (reader.Read())
+                //        {
+                //            apartment.Photo.Add(new Photo() { Path = reader.GetString(0) });
+                //        }
+                //    }
+                //}
             }
             return apartment;
         }
@@ -190,6 +215,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                                 Street = reader.GetString(2),
                                 House = reader.GetInt32(3),
                                 Price = reader.GetDecimal(4),
+                                PathPhoto = reader.GetString(5)
                                 //Description = new Description()
                                 //{
                                 //    Title = reader.GetString(12),
@@ -207,25 +233,29 @@ namespace Project_3._0.Data.Repositories.Implementations
                 }
                 for (int i = 0; i < 3; i++)
                 {
-                    using (SqlCommand cmd = con.CreateCommand())
-                    {
-
-                        cmd.Connection = con;
-                        //cmd.CommandType = System.Data.CommandType.Text;
-                        cmd.CommandType = System.Data.CommandType.Text;
-                        cmd.CommandText = $"SELECT [Photo] FROM [Photo] where ObjectId=@id ";
-                        cmd.Parameters.Add(new SqlParameter("@id", apartments[i].Id));
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                apartments[i].Photo.Add(new Photo() { Path = reader.GetString(0) });
-                            }
-                        }
-                        reader.Close();
-                    }
+                    apartments[i].Photo = GetPhotos(apartments[i].PathPhoto);
                 }
+                //for (int i = 0; i < 3; i++)
+                //{
+                //    using (SqlCommand cmd = con.CreateCommand())
+                //    {
+
+                //        cmd.Connection = con;
+                //        //cmd.CommandType = System.Data.CommandType.Text;
+                //        cmd.CommandType = System.Data.CommandType.Text;
+                //        cmd.CommandText = $"SELECT [Photo] FROM [Photo] where ObjectId=@id ";
+                //        cmd.Parameters.Add(new SqlParameter("@id", apartments[i].Id));
+                //        SqlDataReader reader = cmd.ExecuteReader();
+                //        if (reader.HasRows)
+                //        {
+                //            while (reader.Read())
+                //            {
+                //                apartments[i].Photo.Add(new Photo() { Path = reader.GetString(0) });
+                //            }
+                //        }
+                //        reader.Close();
+                //    }
+                //}
             }
 
             return apartments;

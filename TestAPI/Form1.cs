@@ -1,0 +1,103 @@
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+namespace TestAPI
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string url = @"https://localhost:7286/api/Values/UploadFile/";
+            Uri uri = null;
+            Uri.TryCreate(url, UriKind.Absolute, out uri);
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
+            using (OpenFileDialog dlg = new OpenFileDialog { CheckFileExists = true })
+            {
+                if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dlg.FileName))
+                {
+                    string fileName = dlg.FileName;
+                    try
+                    {
+                        //using var mul = new MultipartFormDataContent();
+                        //mul.Add(new StreamContent(File.OpenRead(fileName)));
+                        //HttpClient client = new HttpClient();
+                        //using var response = client.PostAsync(url, mul);
+
+
+                        //byte[] fileByte = File.ReadAllBytes(fileName);
+                        //using var request = new HttpRequestMessage(HttpMethod.Post, uri);
+                        //request.Content = new ByteArrayContent(fileByte);
+                        //using var response = httpClient.SendAsync(request);
+                        //var resposeText = response.Content.ReadAsStringAsync().Result;
+                        //MessageBox.Show(resposeText);
+
+                        using (HttpClientHandler hdl = new HttpClientHandler())
+                        {
+                            using (HttpClient clnt = new HttpClient(hdl))
+                            {
+                                using (MultipartFormDataContent content = new MultipartFormDataContent())
+                                {
+                                    using (ByteArrayContent fileContent = new ByteArrayContent(File.ReadAllBytes(fileName)))
+                                    {
+                                        //byte[] fileByte = File.ReadAllBytes(fileName);
+
+                                        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                                        {
+                                            FileName = Path.GetFileName(fileName),
+                                            Name = "file"
+                                        };
+
+                                        content.Add(fileContent, "321.png");
+
+                                        var responce = clnt.PostAsync(uri, content).Result;
+
+                                        var text = responce.Content.ReadAsStringAsync().Result;
+                                        MessageBox.Show(text);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+            return;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string url = "https://localhost:7286/api/Values/Ping/1";
+            Uri uri = null;
+            Uri.TryCreate(url, UriKind.Absolute, out uri);
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+            HttpClient httpClient = new HttpClient();
+            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+            using HttpResponseMessage response =  httpClient.Send(request);
+            foreach (var header in response.Headers)
+            {
+                Console.Write($"{header.Key}:");
+                foreach (var headerValue in header.Value)
+                {
+                    textBox1.Text+=(headerValue);
+                }
+            }
+        }
+    }
+}

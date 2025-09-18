@@ -1,16 +1,21 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-
-namespace Project_3._0
+namespace ProjectAPI
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllersWithViews();
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
             builder.Host.ConfigureContainer<ContainerBuilder>(cont =>
             {
@@ -31,21 +36,19 @@ namespace Project_3._0
 
             builder.Services.AddDistributedMemoryCache();
 
-            builder.Services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(1800);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
             var app = builder.Build();
-            // app.MapGet("/", () => "Hello World!");
-            // app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseAuthorization();
             app.UseStaticFiles();
-         
             app.MapControllers();
-            app.UseSession();
-
-
             app.Run();
         }
     }

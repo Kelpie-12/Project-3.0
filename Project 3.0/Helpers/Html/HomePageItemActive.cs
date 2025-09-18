@@ -26,6 +26,7 @@ namespace Project_3._0.Helpers.Html
 
             TagBuilder img = new TagBuilder("img");
             img.Attributes.Add("src", apartment.Photo[0].Path);
+            //img.Attributes.Add("src", "C:\\Users\\roman\\source\\repos\\Project 3.0\\Project 3.0\\wwwroot\\src\\Photo\\3\\3-1.png");
             div.InnerHtml.AppendHtml(img);
             div.InnerHtml.AppendHtml(CarouselContainer(helper, apartment));
             using (var writter = new StringWriter())
