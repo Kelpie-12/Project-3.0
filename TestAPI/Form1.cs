@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -80,24 +81,41 @@ namespace TestAPI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string url = "https://localhost:7286/api/Values/Ping/1";
-            Uri uri = null;
-            Uri.TryCreate(url, UriKind.Absolute, out uri);
-            if (string.IsNullOrEmpty(url))
+            try
             {
-                return;
-            }
-            HttpClient httpClient = new HttpClient();
-            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
-            using HttpResponseMessage response =  httpClient.Send(request);
-            foreach (var header in response.Headers)
-            {
-                Console.Write($"{header.Key}:");
-                foreach (var headerValue in header.Value)
+                using (SqlConnection con=new SqlConnection("Data Source=158.160.0.70:1433;User ID=kelpie;Password=R#529440x!);Integrated Security=True;Connect Timeout=30;Encrypt=True;Trusted_Connection=true;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Initial Catalog=ComopanyProgect"))
                 {
-                    textBox1.Text+=(headerValue);
+                    con.Open();
+                    using(SqlCommand cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = "CREATE DATABASE Tetst;";
+                        cmd.Connection = con;
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            //string url = "https://localhost:7286/api/Values/Ping/1";
+            //Uri uri = null;
+            //Uri.TryCreate(url, UriKind.Absolute, out uri);
+            //if (string.IsNullOrEmpty(url))
+            //{
+            //    return;
+            //}
+            //HttpClient httpClient = new HttpClient();
+            //using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+            //using HttpResponseMessage response =  httpClient.Send(request);
+            //foreach (var header in response.Headers)
+            //{
+            //    Console.Write($"{header.Key}:");
+            //    foreach (var headerValue in header.Value)
+            //    {
+            //        textBox1.Text+=(headerValue);
+            //    }
+            //}
         }
     }
 }

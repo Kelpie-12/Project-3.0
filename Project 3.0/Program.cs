@@ -37,6 +37,8 @@ namespace Project_3._0
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+        
             var app = builder.Build();
             // app.MapGet("/", () => "Hello World!");
             // app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
