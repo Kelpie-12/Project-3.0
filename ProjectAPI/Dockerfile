@@ -12,43 +12,42 @@
 #FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 #ARG BUILD_CONFIGURATION=Release
 #WORKDIR /src
-#COPY ["Project 3.0.csproj", "."]
-#RUN dotnet restore "./Project 3.0.csproj"
+#COPY ["ProjectAPI.csproj", "."]
+#RUN dotnet restore "./ProjectAPI.csproj"
 #COPY . .
 #WORKDIR "/src/."
-#RUN dotnet build "./Project 3.0.csproj" -c $BUILD_CONFIGURATION -o /app/build
+#RUN dotnet build "./ProjectAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 #
 ## This stage is used to publish the service project to be copied to the final stage
 #FROM build AS publish
 #ARG BUILD_CONFIGURATION=Release
-#RUN dotnet publish "./Project 3.0.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
+#RUN dotnet publish "./ProjectAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish 
 #
 ## This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 #FROM base AS final
 #WORKDIR /app
 #COPY --from=publish /app/publish .
-#ENTRYPOINT ["dotnet", "Project 3.0.dll"]
+#ENTRYPOINT ["dotnet", "ProjectAPI.dll"]
+
 #
 #FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
-#WORKDIR /app
-#COPY . .
+#WORKDIR /src
+#COPY ProjectAPI
 #WORKDIR /app
 #RUN dotnet publish -c Release -o /app/publish
 #
 #FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
 #WORKDIR /app
 #COPY --from=build /app/publish .
-#ENTRYPOINT ["dotnet", "Project 3.0.dll"]
-
-# —борка
+#ENTRYPOINT ["dotnet", "ProjectAPI.dll"]
+# —борка проекта
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-ENV ASPNETCORE_URLS=http://0.0.0.0:8080
- 
-COPY ProjectAPI/ProjectAPI.csproj ./ProjectAPI/#COPY . .
+ ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+COPY ProjectAPI/ProjectAPI.csproj ./ProjectAPI/
 RUN dotnet restore ./ProjectAPI/ProjectAPI.csproj
  
-COPY ProjectAPI/. ./ProjectAPI/
+COPY . .
 WORKDIR /src/ProjectAPI
 RUN dotnet publish -c Release -o /app/publish
  
