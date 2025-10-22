@@ -1,21 +1,18 @@
-﻿
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using Project_3._0.Model.Domain;
+﻿using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using ProjectAPI.Model.DTO;
 
-namespace Project_3._0.Data.Repositories.Implementations
+namespace ProjectAPI.Repositories.Implementations
 {
-    public class AgentsRepository : BaseRepository, IAgentsRepository
+    public class AgentRepository : BaseRepository, IAgentRepository
     {
-        
-       
-        public AgentsRepository(IConfiguration configuration) : base(configuration)
+        public AgentRepository(IConfiguration configuration) : base(configuration)
         {
-        }
 
-        public Agent GetAgentById(int id)
+        }
+        public AgentDTO GetAgentById(int id)
         {
-            Agent agent = new Agent();
+            AgentDTO agent = new AgentDTO();
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
@@ -24,34 +21,35 @@ namespace Project_3._0.Data.Repositories.Implementations
                     cmd.Connection = con;
                     //cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.CommandText = $"get_manager_by_id";
-                    cmd.Parameters.Add(new SqlParameter("@archive", 1));
+                    cmd.CommandText = $"get_managerDTO_by_id";
                     cmd.Parameters.Add(new SqlParameter("@manId", id));
-
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
                     SqlDataReader reader = cmd.ExecuteReader();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
                         {
-                            agent = new Agent()
+                            agent = new AgentDTO()
                             {
                                 Id = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                Photo = reader.GetString(3) ?? ""
+                                Photo = reader.GetString(3) ?? "No photo"
                             };
                         }
+                    }
+                    else
+                    {
+                        agent.FirstName = agent.LastName = agent.Photo= "Not found";
+                        agent.Id = -1;
                     }
                 }
             }
             return agent;
-
         }
-
-        public List<Agent> GetAgents()
+        public List<AgentDTO> GetAgents(bool archive)
         {
-            List<Agent> agents = new List<Agent>();
+            List<AgentDTO> agents = new List<AgentDTO>();
             using (SqlConnection con = CreateConnection())
             {
                 con.Open();
@@ -60,8 +58,11 @@ namespace Project_3._0.Data.Repositories.Implementations
                     cmd.Connection = con;
                     //cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.CommandText = $"get_all_manager";
-                    cmd.Parameters.Add(new SqlParameter("@archive", 1));
+                    cmd.CommandText = $"get_all_managerDTO";
+                    if (archive == true)
+                        cmd.Parameters.Add(new SqlParameter("@archive", -1));
+                    else
+                        cmd.Parameters.Add(new SqlParameter("@archive", 1));
 
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -69,12 +70,12 @@ namespace Project_3._0.Data.Repositories.Implementations
                     {
                         while (reader.Read())
                         {
-                            Agent agent = new Agent()
+                            AgentDTO agent = new AgentDTO()
                             {
                                 Id = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                Photo=reader.GetString(3)??""
+                                Photo = reader.GetString(3)
                             };
                             agents.Add(agent);
                         }
@@ -83,23 +84,5 @@ namespace Project_3._0.Data.Repositories.Implementations
             }
             return agents;
         }
-
-        //async Task<Agent> GetAgentByIdAsync(string path)
-        //{
-        //    client.BaseAddress = new Uri(CreateAPIConnection());
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-        //        Agent agent = new Agent();
-        //    HttpResponseMessage response = await client.GetAsync(path);
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        agent = await response.Content.ReadFromJsonAsync<Agent>();
-
-        //    }
-        //    return agent;
-        //}
-
-
     }
 }

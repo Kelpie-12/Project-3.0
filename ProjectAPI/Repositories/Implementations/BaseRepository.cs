@@ -4,7 +4,8 @@ namespace ProjectAPI.Repositories.Implementations
 {
     public class BaseRepository
     {
-        private static readonly string DEFAULT_CONNECTION_STRING = "Kelpie";
+        private static readonly string DEFAULT_CONNECTION_STRING = "Default";
+       // private static readonly string DEFAULT_CONNECTION_STRING = "Kelpie";
         private readonly string _connectionSttring;
         public BaseRepository(IConfiguration configuration)
         {

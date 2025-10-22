@@ -16,9 +16,15 @@ namespace Project_3._0.Services.Implementation
             return _agentsRepository.GetAgentById(id);
         }
 
-        public List<Agent> GetAll()
+        //public async Task<Agent> GetAll()
+        //{
+        //    return await _agentsRepository.GetAgentByIdAsync("");
+        //    //return _agentsRepository.GetAgents();
+        //}
+
+        List<Agent> IAgentServices.GetAll()
         {
-            return _agentsRepository.GetAgents();
+            return  _agentsRepository.GetAgents();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace ProjectAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            builder.WebHost.UseUrls("http://localhost:8080");
+            //builder.WebHost.UseUrls("http://localhos:8080");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseStaticFiles();

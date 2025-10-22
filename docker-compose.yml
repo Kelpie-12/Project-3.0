@@ -1,49 +1,49 @@
-services:
-  crud_webaip:
-   build:
-    context: .
-    dockerfile: ProjectAPI/Dockerfile
-   ports:
-    - "8080:8080"
-   container_name: web_api
-   depends_on:
-    - db
+# services:
+#   crud_webaip:
+#    build:
+#     context: .
+#     dockerfile: ProjectAPI/Dockerfile
+#    ports:
+#     - "8080:8080"
+#    container_name: web_api
+#    depends_on:
+#     - db
 
 
 
-  db:
-   container_name: app_db
-   # build:
-   #  dockerfile: Dockerfile
-   image: mysql:8.0
-   ports:
-    - 3306:3306
-   environment:
-    - MYSQL_USER=Kelpie
-    - MYSQL_DATABASE=ComopanyProject
-    - MYSQL_ROOT_PASSWORD=R#529440x!)
-    - MYSQL_PASSWORD=R#529440x!)
-    - SA_PASSWORD=R#529440x!)
-   volumes:
-    - db_data:/var/lib/mysql
+#   db:
+#    container_name: app_db
+#    # build:
+#    #  dockerfile: Dockerfile
+#    image: mysql:8.0
+#    ports:
+#     - 3306:3306
+#    environment:
+#     - MYSQL_USER=Kelpie
+#     - MYSQL_DATABASE=ComopanyProject
+#     - MYSQL_ROOT_PASSWORD=R#529440x!)
+#     - MYSQL_PASSWORD=R#529440x!)
+#     - SA_PASSWORD=R#529440x!)
+#    volumes:
+#     - db_data:/var/lib/mysql
   
 
-  project3.0:
-    container_name: Project3.0
-   # image: ${DOCKER_REGISTRY-}project30
-    build:
-      context: .
-      dockerfile: Project 3.0/Dockerfile
-    ports:
-      - 8001:80
-    depends_on:
-     - db
-    environment:
-     - DB_HOST=db
-     - DB_NAME=Kelpie
-     - DB_SA_PASSWORD=R#529440x!) 
+#   project3.0:
+#     container_name: Project3.0
+#    # image: ${DOCKER_REGISTRY-}project30
+#     build:
+#       context: .
+#       dockerfile: Project 3.0/Dockerfile
+#     ports:
+#       - 8001:80
+#     depends_on:
+#      - db
+#     environment:
+#      - DB_HOST=db
+#      - DB_NAME=Kelpie
+#      - DB_SA_PASSWORD=R#529440x!) 
 
 
-volumes:
-  db_data:
-    driver: local
+# volumes:
+#   db_data:
+#     driver: local
