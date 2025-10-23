@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Project_3._0.Data.Repositories;
 using Project_3._0.Helpers.Html;
 using Project_3._0.Model.Domain;
@@ -23,12 +24,12 @@ namespace Project_3._0.Controllers
         [HttpGet]
         [ActionName("Objects")]
         [Route("{action}")]
-        public IActionResult Index(int objectType, List<Project_3._0.Model.Domain.Object> objects)
+        public async Task<IActionResult> Index(int objectType, List<Project_3._0.Model.Domain.Object> objects)
         {
             //реализовать еnum
             if (objectType == 0 )
             {
-                foreach (Apartment item in _apartmentServices.GetAll(true))
+                foreach (Apartment item in await _apartmentServices.GetAll(true))
                 {
                     objects.Add(item);
                 }
@@ -38,7 +39,7 @@ namespace Project_3._0.Controllers
             }
             else if (objectType == 1)
             {
-                foreach (Apartment item in _apartmentServices.GetAll(false))
+                foreach (Apartment item in await _apartmentServices.GetAll(false))
                 {
                     objects.Add(item);
                 }
@@ -51,11 +52,11 @@ namespace Project_3._0.Controllers
         [HttpGet]
         [ActionName("ObjectsSingle")]
         [Route("{action}")]
-        public IActionResult ObjectsSingle(int id, ObjectSinglePageView obj)
+        public async Task<IActionResult> ObjectsSingle(int id, ObjectSinglePageView obj)
         {
             //изменить способ получения объекта что бы был id agenta
             obj.Object = _apartmentServices.GetById(id);
-            obj.Agent = _agentServices.GetAgentById(obj.Object.AgentId);
+            obj.Agent = await _agentServices.GetAgentByIdAsync(obj.Object.Id);//_agentServices.GetAgentById(obj.Object.AgentId);
             obj.Review = _reviewServices.GetReviewsByAgentId(id);
 
             return View(obj);

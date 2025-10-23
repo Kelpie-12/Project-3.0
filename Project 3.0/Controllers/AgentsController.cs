@@ -18,6 +18,7 @@ namespace Project_3._0.Controllers
         public IActionResult Index()
         {
             List<Agent> agents = _agentServices.GetAll();
+         //  var a = _agentServices.GetAgentAsync();
             return View(agents);
         }
 

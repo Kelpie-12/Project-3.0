@@ -12,6 +12,19 @@ namespace Project_3._0.Data.Repositories.Implementations
         public AgentsRepository(IConfiguration configuration) : base(configuration)
         {
         }
+        static HttpClient client = new HttpClient();
+        static async Task<Agent> GetAgentById2(int id)
+        {
+            Agent agent = null;
+            HttpResponseMessage response = await client.GetAsync($"http://localhost:5190/api/Agent/GetAgentById/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+              string _agent = await response.Content.ReadAsStringAsync();
+                agent.FirstName = _agent;
+            }
+
+            return agent;
+        }
 
         public Agent GetAgentById(int id)
         {
@@ -84,7 +97,7 @@ namespace Project_3._0.Data.Repositories.Implementations
             return agents;
         }
 
-        //async Task<Agent> GetAgentByIdAsync(string path)
+              //async Task<Agent> GetAgentByIdAsync(string path)
         //{
         //    client.BaseAddress = new Uri(CreateAPIConnection());
         //    client.DefaultRequestHeaders.Accept.Clear();

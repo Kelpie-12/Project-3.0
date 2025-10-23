@@ -235,7 +235,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                 {
                     apartments[i].Photo = GetPhotos(apartments[i].PathPhoto);
                 }
-                //for (int i = 0; i < 3; i++)
+                /*for (int i = 0; i < 3; i++)
                 //{
                 //    using (SqlCommand cmd = con.CreateCommand())
                 //    {
@@ -255,7 +255,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                 //        }
                 //        reader.Close();
                 //    }
-                //}
+                }*/
             }
 
             return apartments;

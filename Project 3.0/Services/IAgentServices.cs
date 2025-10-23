@@ -6,5 +6,6 @@ namespace Project_3._0.Services
     {
         List<Agent> GetAll();
         Agent GetAgentById(int id);
+        Task<Agent?> GetAgentByIdAsync(int id);
     }
 }
