@@ -5,7 +5,7 @@ namespace Project_3._0.Services
     public interface IApartmentServices
     {
         Task<List<Apartment>> GetAll(bool brandNew);
-        Apartment? GetById(int id);
-        List<Apartment> GetTop();
+        Task<Apartment?> GetById(int id);
+        Task<List<Apartment>> GetTop();
     }
 }
