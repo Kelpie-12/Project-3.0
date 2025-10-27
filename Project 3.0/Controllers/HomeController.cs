@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Project_3._0.Data.Repositories;
 using Project_3._0.Model.Domain;
 using Project_3._0.Model.View;
@@ -22,9 +23,9 @@ namespace Project_3._0.Controllers
         [HttpGet]
         [ActionName("Home")]
         [Route("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Apartment> apartments = _apartmentServices.GetTop();
+            List<Apartment> apartments = await _apartmentServices.GetTop();
             List<Agent> agents = _agentServices.GetAll();
             List<Review> reviews = _reviewServices.GetAll();
 

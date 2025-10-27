@@ -1,9 +1,9 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProjectAPI.Model.DTO;
-using ProjectAPI.Repositories;
+using ProjectAPI.Services;
 
 namespace ProjectAPI.Controllers
 {
@@ -11,36 +11,24 @@ namespace ProjectAPI.Controllers
     [ApiController]
     public class AgentController : Controller
     {
-        private readonly IAgentRepository _agentRepository;
-        public AgentController(IAgentRepository agentRepository)
+        private readonly IAgentServices _agentServices;
+        public AgentController(IAgentServices agentServices)
         {
-            _agentRepository = agentRepository;
+            _agentServices = agentServices;
         }
         [HttpGet]
         [Route("GetAgentById")]
-        public IActionResult GetAgentById(int id)
+        public async Task<IActionResult> GetAgentById(int id)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions()
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true
-            };
-            string json = JsonSerializer.Serialize(_agentRepository.GetAgentById(id), options);
-
-            return Content(json);
+            string response = await _agentServices.GetByAgentId(id);
+            return Content(response);
         }
         [HttpGet]
         [Route("GetAgents")]
-        public IActionResult GetAgents(bool archive)
+        public async Task<IActionResult> GetAgentsAsync(bool archive = false)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions()
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true
-            };
-            string json = JsonSerializer.Serialize(_agentRepository.GetAgents(archive), options);
-
-            return Content(json);
+            string response = await _agentServices.GetAll(archive);
+            return Content(response);
         }
     }
 }

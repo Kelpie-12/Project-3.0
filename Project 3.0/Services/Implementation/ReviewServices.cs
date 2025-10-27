@@ -12,12 +12,14 @@ namespace Project_3._0.Services.Implementation
             _reviewRepository = reviewRepository;
         }
 
-        public List<Review> GetAll()
+
+
+        async Task<List<Review>> IReviewServices.GetAll()
         {
-            return _reviewRepository.GetAll();
+            return await _reviewRepository.GetAll();
         }
 
-        public Review GetReviewsByAgentId(int id)
+        Task<Review> IReviewServices.GetReviewsByAgentId(int id)
         {
             return _reviewRepository.GetReviewAgentById(id);
         }

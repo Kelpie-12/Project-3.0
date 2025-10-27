@@ -4,7 +4,7 @@ namespace Project_3._0.Data.Repositories
 {
     public interface IReviewRepository
     {
-        List<Review> GetAll();
-        Review GetReviewAgentById(int id);
+        Task<List<Review>> GetAll();
+        Task<Review> GetReviewAgentById(int id);
     }
 }

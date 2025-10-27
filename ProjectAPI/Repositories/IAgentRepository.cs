@@ -4,7 +4,7 @@ namespace ProjectAPI.Repositories
 {
     public interface IAgentRepository
     {
-        List<AgentDTO> GetAgents(bool archive);
-        AgentDTO GetAgentById( int id );
+        Task<List<AgentDTO>> GetAgents(bool archive);
+        Task<AgentDTO> GetAgentById(int id);
     }
 }

@@ -10,7 +10,7 @@ namespace ProjectAPI.Repositories.Implementations
         {
 
         }
-        public AgentDTO GetAgentById(int id)
+        public async Task<AgentDTO> GetAgentById(int id)
         {
             AgentDTO agent = new AgentDTO();
             using (SqlConnection con = CreateConnection())
@@ -24,7 +24,7 @@ namespace ProjectAPI.Repositories.Implementations
                     cmd.CommandText = $"get_managerDTO_by_id";
                     cmd.Parameters.Add(new SqlParameter("@manId", id));
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader =await cmd.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
@@ -47,7 +47,7 @@ namespace ProjectAPI.Repositories.Implementations
             }
             return agent;
         }
-        public List<AgentDTO> GetAgents(bool archive)
+        public async Task<List<AgentDTO>> GetAgents(bool archive)
         {
             List<AgentDTO> agents = new List<AgentDTO>();
             using (SqlConnection con = CreateConnection())
@@ -65,7 +65,7 @@ namespace ProjectAPI.Repositories.Implementations
                         cmd.Parameters.Add(new SqlParameter("@archive", 1));
 
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader =await cmd.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
                         while (reader.Read())

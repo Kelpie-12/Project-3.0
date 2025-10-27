@@ -1,9 +1,7 @@
-﻿
-using System.Data.SqlClient;
-using System.Threading.Tasks;
-using Project_3._0.Model.Domain;
+﻿using System.Data.SqlClient;
+using ProjectAPI.Model;
 
-namespace Project_3._0.Data.Repositories.Implementations
+namespace ProjectAPI.Repositories.Implementations
 {
     public class ReviewRepository : BaseRepository, IReviewRepository
     {
@@ -11,7 +9,7 @@ namespace Project_3._0.Data.Repositories.Implementations
         {
         }
 
-        public async Task<List<Review>> GetAll()
+        public async Task<List<Review>> GetAllAsync()
         {
             List<Review> reviews = new List<Review>();
             using (SqlConnection con = CreateConnection())
@@ -26,7 +24,7 @@ namespace Project_3._0.Data.Repositories.Implementations
                     cmd.Parameters.Add(new SqlParameter("@archive", 1));
 
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
-                    SqlDataReader reader =await cmd.ExecuteReaderAsync();
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
@@ -46,15 +44,14 @@ namespace Project_3._0.Data.Repositories.Implementations
                     }
                 }
             }
-            return reviews;
+            return reviews;           
         }
 
-        public async Task<Review> GetReviewAgentById(int id)
+        public async Task<Review> GetReviewAgentByIdAsync(int id)
         {
             Review review = new Review();
 
-
-            return review;
+            return review;            
         }
     }
 }

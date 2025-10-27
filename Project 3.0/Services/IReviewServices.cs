@@ -4,7 +4,7 @@ namespace Project_3._0.Services
 {
     public interface IReviewServices
     {
-        Review GetReviewsByAgentId(int id);
-        List<Review> GetAll();
+        Task<Review> GetReviewsByAgentId(int id);
+        Task<List<Review>> GetAll();
     }
 }

@@ -55,9 +55,9 @@ namespace Project_3._0.Controllers
         public async Task<IActionResult> ObjectsSingle(int id, ObjectSinglePageView obj)
         {
             //изменить способ получения объекта что бы был id agenta
-            obj.Object = _apartmentServices.GetById(id);
+            obj.Object = await _apartmentServices.GetById(id);
             obj.Agent = await _agentServices.GetAgentByIdAsync(obj.Object.Id);//_agentServices.GetAgentById(obj.Object.AgentId);
-            obj.Review = _reviewServices.GetReviewsByAgentId(id);
+            obj.Review = await _reviewServices.GetReviewsByAgentId(id);
 
             return View(obj);
         }
