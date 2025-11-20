@@ -18,7 +18,7 @@ namespace Project_3._0.Services.Implementation
         {
             HttpClient client = _clientFactory.CreateClient("Agent");
             Agent agent = await client.GetFromJsonAsync<Agent>($"GetAgentById?id={id}");
-
+            
             Console.WriteLine($"Agent: id={agent.Id}, {agent.FirstName}");
             return agent;
 

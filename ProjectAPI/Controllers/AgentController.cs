@@ -30,5 +30,13 @@ namespace ProjectAPI.Controllers
             string response = await _agentServices.GetAll(archive);
             return Content(response);
         }
+        [HttpGet]
+        [Route("GetPhoto")]
+        public async Task<IActionResult> GetPhoto()
+        {
+            var fileStream = new FileStream("wwwroot/src/ObjectPhoto/1068/1068-1.jpeg", FileMode.Open);
+            return File(fileStream, "application/octet-stream");
+            //return Content("");
+        }
     }
 }

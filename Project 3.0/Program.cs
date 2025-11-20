@@ -40,6 +40,7 @@ namespace Project_3._0
             builder.Services.AddHttpClient("Agent", o =>
             {
                 o.BaseAddress = new Uri("http://localhost:5190/api/Agent/");
+                
             });
             builder.Services.AddHttpClient("Apartment", o =>
             {
