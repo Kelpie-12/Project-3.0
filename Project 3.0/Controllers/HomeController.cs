@@ -27,7 +27,7 @@ namespace Project_3._0.Controllers
         {
             List<Apartment> apartments = await _apartmentServices.GetTop();
             List<Agent> agents = _agentServices.GetAll();
-            List<Review> reviews = _reviewServices.GetAll();
+            List<Review> reviews = await _reviewServices.GetAll();
 
             HomePageView view = new HomePageView()
             {

@@ -13,7 +13,7 @@ namespace ProjectAPI.Controllers
 
         [HttpGet]
         [Route("Ping")]
-        public async Task<IActionResult> Ping(int id)
+        public IActionResult Ping(int id)
         {
             return Ok(new { date = DateTime.Now });
         }

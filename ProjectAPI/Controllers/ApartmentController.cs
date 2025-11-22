@@ -4,6 +4,7 @@ using ProjectAPI.Model.DTO;
 using ProjectAPI.Model;
 using ProjectAPI.Repositories;
 using ProjectAPI.Services;
+using System.Net.Http;
 
 namespace ProjectAPI.Controllers
 {
@@ -12,14 +13,16 @@ namespace ProjectAPI.Controllers
     public class ApartmentController : ControllerBase
     {
         private readonly IApartmentServices _apartmentServices;
-        public ApartmentController(IApartmentServices apartmentServices)
+        private readonly IPhotoServices _photoServices;
+        public ApartmentController(IApartmentServices apartmentServices, IPhotoServices photoServices)
         {
             _apartmentServices = apartmentServices;
+            _photoServices = photoServices;
         }
 
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> Add(FileUploadRequest request)
+        public async Task<IActionResult> AddAsync(FileUploadRequest request)
         {
             //long size = files.Sum(f => f.Length);
             long size = request.File.Sum(f => f.Length);
@@ -71,7 +74,7 @@ namespace ProjectAPI.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<string> GetAll(bool brandNew)
+        public async Task<string> GetAllAsync(bool brandNew)
         {
             //List<ApartmentDTO> apartments = new List<ApartmentDTO>();
             string response = await _apartmentServices.GetAll(brandNew);
@@ -81,16 +84,16 @@ namespace ProjectAPI.Controllers
 
         [HttpGet]
         [Route("GetById")]
-        public async Task<ApartmentDTO> GetById(int id)
+        public async Task<ApartmentDTO> GetByIdAsync(int id)
         {
             ApartmentDTO apartments = new ApartmentDTO();
-           // apartments = await _apartmentRepository.GetById(id);
+            // apartments = await _apartmentRepository.GetById(id);
             return apartments;
         }
 
         [HttpGet]
         [Route("GetTop")]
-        public async Task<string> GetTop()
+        public async Task<string> GetTopAsync()
         {
             // List<ApartmentDTO> apartments = new List<ApartmentDTO>();
             // apartments = await _apartmentRepository.GetTop();
@@ -100,6 +103,24 @@ namespace ProjectAPI.Controllers
             return reponse;
         }
 
+        [HttpGet]
+        [Route("GetAllApartmentPhoto")]
+        public async Task<string> GetAllApartmentPhotoAsync(int id)
+        {
+            return await _photoServices.GetAllApartmentPhotoAsync(id, "/api/Apartment/GetApartmentPhoto?id=");
+            //return @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=1068-1";
+        }
 
+        [HttpGet]
+        [Route("GetApartmentPhoto")]
+        public async Task<string> GetPhotoAsync(string id="")
+        {
+            if (string.Empty == id)
+            {
+                return "Invalid id";
+            }
+            string result = await _photoServices.GetPhotoAsync(id);
+            return result;
+        }
     }
 }

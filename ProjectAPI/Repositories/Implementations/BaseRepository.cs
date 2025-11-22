@@ -18,6 +18,7 @@ namespace ProjectAPI.Repositories.Implementations
         }
         protected SqlConnection CreateConnection()
         {
+            //расширить
             return new SqlConnection(_connectionSttring);
         }
     }
