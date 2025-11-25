@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Project_3._0.Model.Domain;
 using Project_3._0.Services;
 
@@ -15,9 +16,9 @@ namespace Project_3._0.Controllers
         [HttpGet]
         [ActionName("Agents")]
         [Route("{action}")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Agent> agents = _agentServices.GetAll();
+            List<Agent> agents =await _agentServices.GetAllAgentAsync(false);
          //  var a = _agentServices.GetAgentAsync();
             return View(agents);
         }

@@ -9,10 +9,10 @@ namespace ProjectAPI.Services.Implementations
     public class PhotoServices : IPhotoServices
     {
         private string currentDirectory = Directory.GetCurrentDirectory();
-     
+
         private JsonSerializerOptions _option;
         public PhotoServices()
-        {       
+        {
             currentDirectory += $"\\wwwroot\\src";
             _option = new JsonSerializerOptions()
             {
@@ -35,9 +35,24 @@ namespace ProjectAPI.Services.Implementations
             byte[] b = await System.IO.File.ReadAllBytesAsync(path);
 
             string result = JsonSerializer.Serialize(b, _option);
-            
+
 
             return result;
+        }
+
+        public async Task<byte[]> GetAgentPhotoByIdByteAsync(string id)
+        {
+            if (id == string.Empty)
+            {
+                return [];
+            }
+            string path = currentDirectory + $"\\AgentPhoto\\" + id;
+            if (!File.Exists(path))
+            {
+                return [];
+            }
+            byte[] b = await System.IO.File.ReadAllBytesAsync(path);
+            return b;
         }
 
         public string GetAllAgentPhoto(string route)
@@ -70,8 +85,8 @@ namespace ProjectAPI.Services.Implementations
             {
                 paths.Add(route + item.Name /*+ Path.GetFileNameWithoutExtension(item.Name)*/);
             }
-            string resalt =  JsonSerializer.Serialize(paths,_option);
-            return  resalt;
+            string resalt = JsonSerializer.Serialize(paths, _option);
+            return resalt;
             //нужно отправлять json с массивом ссылок на апи со скачиванием фото
         }
 
@@ -90,7 +105,7 @@ namespace ProjectAPI.Services.Implementations
             }
             byte[] b = await System.IO.File.ReadAllBytesAsync(path);
 
-            string result = JsonSerializer.Serialize(b,_option);
+            string result = JsonSerializer.Serialize(b, _option);
 
             //System.Drawing.Image ImageFromFile = System.Drawing.Image.FromFile(currentDirectory + s[0] + "\\" + id);
             //Bitmap bmp = new Bitmap(ImageFromFile);//Bitmap конвертирую в массив байтов

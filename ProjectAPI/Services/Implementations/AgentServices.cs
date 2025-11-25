@@ -31,7 +31,7 @@ namespace ProjectAPI.Services.Implementations
 
         public async Task<string> GetAgentPhotoByIdAsync(string id)
         {
-            string photo = JsonSerializer.Serialize(await _photoServices.GetAgentPhotoByIdAsync(id), options);         
+            string photo = JsonSerializer.Serialize(await _photoServices.GetAgentPhotoByIdAsync(id), options);
             return photo;
         }
 
@@ -39,6 +39,10 @@ namespace ProjectAPI.Services.Implementations
         {
             List<AgentDTO> agents = new List<AgentDTO>();
             agents = await _agentRepository.GetAgents(archive);
+            for (int i = 0; i < agents.Count; i++)
+            {
+                agents[i].Image = await _photoServices.GetAgentPhotoByIdByteAsync(agents[i].Photo);
+            }
             string json = JsonSerializer.Serialize(agents, options);
             return json;
         }

@@ -26,14 +26,14 @@ namespace Project_3._0.Controllers
         public async Task<IActionResult> Index()
         {
             List<Apartment> apartments = await _apartmentServices.GetTop();
-            List<Agent> agents = _agentServices.GetAll();
+            List<Agent> agents = await _agentServices.GetAllAgentAsync(false);
             List<Review> reviews = await _reviewServices.GetAll();
 
             HomePageView view = new HomePageView()
             {
                 Agents = agents,
                 Apartments = apartments,
-                Reviews=reviews
+                Reviews = reviews
             };
             return View(view);
         }

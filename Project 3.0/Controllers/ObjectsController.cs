@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Project_3._0.Data.Repositories;
-using Project_3._0.Helpers.Html;
+﻿using Microsoft.AspNetCore.Mvc;
+using Project_3._0.Model.Cache;
 using Project_3._0.Model.Domain;
 using Project_3._0.Model.View;
 using Project_3._0.Services;
-using Project_3._0.Services.Implementation;
 
 namespace Project_3._0.Controllers
 {
@@ -27,22 +24,24 @@ namespace Project_3._0.Controllers
         public async Task<IActionResult> Index(int objectType, List<Project_3._0.Model.Domain.Object> objects)
         {
             //реализовать еnum
-            if (objectType == 0 )
+            if (objectType == TypeOffer.Apartment )
             {
-                foreach (Apartment item in await _apartmentServices.GetAll(true))
-                {
+                List<Apartment> res = await _apartmentServices.GetAll(true);
+                foreach (Apartment item in res)
+                {                                 
                     objects.Add(item);
                 }
                 ViewBag.Object = "Новостройки";
                 ViewBag.Desc = "Мы предлагаем современные жилые комплексы, которые строятся с учетом последних технологий и стандартов комфорта. Они отличаются современным дизайном, улучшенной инфраструктурой и высоким уровнем энергоэффективности. Покупка квартиры в новостройке становится все более популярной благодаря возможностям индивидуальной планировки, современным материалам и развитой социальной инфраструктуре рядом с домом. В таких жилых комплексах часто реализуются дополнительные удобства: паркинги, детские площадки, спортивные зоны и коммерческие помещения. Инвестирование в новостройки также считается выгодным вложением, поскольку такие объекты обычно растут в цене и предоставляют возможность выбрать жилье по своему вкусу и бюджету.";
 
             }
-            else if (objectType == 1)
+            else if (objectType == TypeOffer.SecondApartment)
             {
                 foreach (Apartment item in await _apartmentServices.GetAll(false))
-                {
-                    objects.Add(item);
+                {                  
+                    objects.Add(item);                    
                 }
+
                 ViewBag.Object = "Вторичное жилье";
                 ViewBag.Desc = "Мы предлагаем объекты в различных районах города, с разной площадью и планировками, чтобы каждый нашел жилье по своему вкусу и бюджету. ";
             }

@@ -20,17 +20,24 @@ namespace Project_3._0.Services.Implementation
             List<Apartment> apartment = await client.GetFromJsonAsync<List<Apartment>>($"GetAll?brandNew={brandNew}");
 
 
-            foreach (Apartment item in apartment)
+            foreach (var item in apartment)
             {
-                item.Photo = _photoServices.GetPhotos(item.PathPhoto);
+                IList<string> photoRoute = await _photoServices.GetAllApartmentPhoto(item.Id.ToString());
+                item.Img = new List<byte[]>();
+                foreach (var photo in photoRoute)
+                {
+                    item.Img.Add(await _photoServices.GetApartmentPhotoByIdAsync(photo));
+                }
             }
-            Console.WriteLine($"Apartment: id={apartment[0].Id}, {apartment[0].Street}");
+
+            //foreach (Apartment item in apartment)
+            //{
+            //    item.Photo = _photoServices.GetPhotos(item.PathPhoto);
+            //}
+            //Console.WriteLine($"Apartment: id={apartment[0].Id}, {apartment[0].Street}");
             return apartment;
         }
-        //public List<Apartment> GetAll(bool brandNew)
-        //{
-        //    return _apartmentRepository.GetAll(brandNew);
-        //}
+
 
         public async Task<Apartment?> GetById(int id)
         {
@@ -39,12 +46,12 @@ namespace Project_3._0.Services.Implementation
             apartment.Img = new List<byte[]>();
             IList<string> photoRoute = await _photoServices.GetAllApartmentPhoto(apartment.Id.ToString());
             foreach (var item in photoRoute)
-            {              
+            {
                 apartment.Img.Add(await _photoServices.GetApartmentPhotoByIdAsync(item));
             }
 
-            apartment.Photo = _photoServices.GetPhotos(apartment.PathPhoto);
-            Console.WriteLine($"Apartment: id={apartment.Id}, {apartment.Street}");
+            // apartment.Photo = _photoServices.GetPhotos(apartment.PathPhoto);
+            //Console.WriteLine($"Apartment: id={apartment.Id}, {apartment.Street}");
             return apartment;
         }
 
@@ -52,11 +59,20 @@ namespace Project_3._0.Services.Implementation
         {
             HttpClient client = _clientFactory.CreateClient("Apartment");
             List<Apartment> apartment = await client.GetFromJsonAsync<List<Apartment>>($"GetTop");
-            foreach (Apartment item in apartment)
+            foreach (var ap in apartment)
             {
-                item.Photo = _photoServices.GetPhotos(item.PathPhoto);
+                ap.Img = new List<byte[]>();
+                IList<string> photoRoute = await _photoServices.GetAllApartmentPhoto(ap.Id.ToString());
+                foreach (var item in photoRoute)
+                {
+                    ap.Img.Add(await _photoServices.GetApartmentPhotoByIdAsync(item));
+                }
             }
-            Console.WriteLine($"Apartment: id={apartment[0].Id}, {apartment[0].Street}");
+            //foreach (Apartment item in apartment)
+            //{
+            //    item.Photo = _photoServices.GetPhotos(item.PathPhoto);
+            //}
+            //Console.WriteLine($"Apartment: id={apartment[0].Id}, {apartment[0].Street}");
             return apartment;
         }
     }

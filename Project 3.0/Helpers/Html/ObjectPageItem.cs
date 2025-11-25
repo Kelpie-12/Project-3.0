@@ -50,9 +50,19 @@ namespace Project_3._0.Helpers.Html
 
                 TagBuilder img = new TagBuilder("img");
                 img.MergeAttribute("class", "img-fluid");
-                if (obj.Photo.Count>0)
+                //if (obj.Photo.Count > 0)
+                //{
+                //    img.MergeAttribute("src", obj.Photo[0].Path);
+                //}
+                //else
+                //{
+                //    img.MergeAttribute("src", "");
+                //}
+                if (obj.Img.Count> 0)
                 {
-                img.MergeAttribute("src", obj.Photo[0].Path);
+                    string imreBase64Data = Convert.ToBase64String(obj.Img[0]);
+                    string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+                    img.MergeAttribute("src", imgDataURL);
                 }
                 else
                 {
@@ -61,8 +71,7 @@ namespace Project_3._0.Helpers.Html
 
 
 
-
-                    TagBuilder span = new TagBuilder("span");
+                TagBuilder span = new TagBuilder("span");
                 span.MergeAttribute("class", "sale-rent");
                 span.InnerHtml.Append($"Цена | {obj.Price}");
 

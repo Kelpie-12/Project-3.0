@@ -25,7 +25,12 @@ namespace Project_3._0.Helpers.Html
                 div.Attributes.Add("class", "carousel-item ");
 
             TagBuilder img = new TagBuilder("img");
-            img.Attributes.Add("src", apartment.Photo[0].Path);
+            // img.Attributes.Add("src", apartment.Photo[0].Path);
+
+            string imreBase64Data = Convert.ToBase64String(apartment.Img[0]);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+            img.Attributes.Add("src", imgDataURL);
+
             //img.Attributes.Add("src", "C:\\Users\\roman\\source\\repos\\Project 3.0\\Project 3.0\\wwwroot\\src\\Photo\\3\\3-1.png");
             div.InnerHtml.AppendHtml(img);
             div.InnerHtml.AppendHtml(CarouselContainer(helper, apartment));
@@ -99,7 +104,13 @@ namespace Project_3._0.Helpers.Html
             pic.Attributes.Add("class", "pic");
             TagBuilder img = new TagBuilder("img");
             img.Attributes.Add("class", "img-fluid");
-            img.Attributes.Add("src", agent.Photo);
+
+            
+            string imreBase64Data = Convert.ToBase64String(agent.Image);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+
+
+            img.Attributes.Add("src", imgDataURL);
             pic.InnerHtml.AppendHtml(img);
 
             TagBuilder meb = new TagBuilder("div");

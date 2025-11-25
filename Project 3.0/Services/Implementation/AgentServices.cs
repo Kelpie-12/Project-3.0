@@ -20,8 +20,12 @@ namespace Project_3._0.Services.Implementation
         {
             HttpClient client = _clientFactory.CreateClient("Agent");
             Agent? agent = await client.GetFromJsonAsync<Agent>($"GetAgentById?id={id}");
-            using var response = await client.GetAsync($"GetAgentPhotoById?id={agent.Photo}");
+
+
+            using var response = await client.GetAsync($"GetAgentPhotoById?id={agent.Id}");
             string a = await response.Content.ReadAsStringAsync(); //== "Invalid id";
+
+
             if (a == "Invalid id")
             {
                 return agent;
@@ -29,28 +33,21 @@ namespace Project_3._0.Services.Implementation
             byte[]? img = response.Content.ReadFromJsonAsync<byte[]>().Result;
             agent.Image = img;
 
-            Console.WriteLine($"Agent: id={agent.Id}, {agent.FirstName}");
+            //Console.WriteLine($"Agent: id={agent.Id}, {agent.FirstName}");
             return agent;
 
         }
-        public async Task<Agent?> GetAllAgent(bool inStorage)
+
+
+        public async Task<List<Agent>> GetAllAgentAsync(bool inStorage)
         {
             HttpClient client = _clientFactory.CreateClient("Agent");
-            Agent? agent = await client.GetFromJsonAsync<Agent>($"GetAgents?archive={inStorage}");
+            List<Agent?> agent = await client.GetFromJsonAsync<List<Agent>>($"GetAgents?archive={inStorage}");          
 
-
-            Console.WriteLine($"Agent: id={agent.Id}, {agent.FirstName}");
+            // Console.WriteLine($"Agent: id={agent.Id}, {agent.FirstName}");
             return agent;
         }
 
-        public Agent GetAgentById(int id)
-        {
-            return _agentsRepository.GetAgentById(id);
-        }
 
-        List<Agent> IAgentServices.GetAll()
-        {
-            return _agentsRepository.GetAgents();
-        }
     }
 }
