@@ -16,6 +16,7 @@
         public decimal Price { get; set; }
         public Description? Description { get; set; }
         public List<Photo>? Photo { get; set; }
+        public IList<byte[]>? Img { get; set; }
 
     }
 }

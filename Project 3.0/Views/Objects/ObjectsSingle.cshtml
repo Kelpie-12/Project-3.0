@@ -39,30 +39,35 @@
 				<div class="portfolio-details-slider swiper init-swiper">
 					<script type="application/json" class="swiper-config">
 						{
-						  "loop": true,
-						  "speed": 600,
-						  "autoplay": {
-							"delay": 5000
-						  },
-						  "slidesPerView": "auto",
-						  "navigation": {
-							"nextEl": ".swiper-button-next",
-							"prevEl": ".swiper-button-prev"
-						  },
-						  "pagination": {
-							"el": ".swiper-pagination",
-							"type": "bullets",
-							"clickable": true
-						  }
+						"loop": true,
+						"speed": 600,
+						"autoplay": {
+						"delay": 5000
+						},
+						"slidesPerView": "auto",
+						"navigation": {
+						"nextEl": ".swiper-button-next",
+						"prevEl": ".swiper-button-prev"
+						},
+						"pagination": {
+						"el": ".swiper-pagination",
+						"type": "bullets",
+						"clickable": true
+						}
 						}
 					</script>
 					<div class="swiper-wrapper align-items-center">
 
 						@{
-							foreach (var item in m.Photo)
+							foreach (var item in m.Img)
 							{
 								<div class="swiper-slide">
-									<img src="@item.Path"  alt="">
+
+									@{
+										string imreBase64Data = Convert.ToBase64String(item);
+										string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+									}
+									<img src="@imgDataURL" alt="">
 								</div>
 
 							}
@@ -88,20 +93,13 @@
 
 						<div class="portfolio-description">
 							<h2>@m.Description.Title</h2>
-							<p>
-								@m.Description.Paragraph_1
-							</p>
-							<p>
-								@m.Description.Paragraph_2
-							</p>
+							@{
+								foreach (string item in m.Description.Paragrahs)
+								{
+									<p>@item</p>
+								}
+							}
 
-							<p>
-								@m.Description.Paragraph_3
-							</p>
-							@* 
-							<p>
-								Sunt voluptatum sapiente facilis quo odio aut ipsum repellat debitis. Molestiae et autem libero. Explicabo et quod necessitatibus similique quis dolor eum. Numquam eaque praesentium rem et qui nesciunt.
-							</p> *@
 
 							<div class="testimonial-item">
 								<p>

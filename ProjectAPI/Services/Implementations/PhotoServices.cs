@@ -1,64 +1,106 @@
-﻿
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
-using ProjectAPI.Model;
 using ProjectAPI.Model.DTO;
 
 namespace ProjectAPI.Services.Implementations
 {
     public class PhotoServices : IPhotoServices
     {
-        string currentDirectory = Directory.GetCurrentDirectory();
+        private string currentDirectory = Directory.GetCurrentDirectory();
+     
+        private JsonSerializerOptions _option;
         public PhotoServices()
-        {
-            currentDirectory += $"\\wwwroot\\src\\ObjectPhoto\\";
+        {       
+            currentDirectory += $"\\wwwroot\\src";
+            _option = new JsonSerializerOptions()
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                WriteIndented = true
+            };
         }
-        public Task<string> GetAgentPhotoAsync(AgentDTO agent)
-        {
 
-            throw new NotImplementedException();
+        public async Task<string> GetAgentPhotoByIdAsync(string id)
+        {
+            if (id == string.Empty)
+            {
+                return "Invalid id";
+            }
+            string path = currentDirectory + $"\\AgentPhoto\\" + id;
+            if (!File.Exists(path))
+            {
+                return "Invalid id";
+            }
+            byte[] b = await System.IO.File.ReadAllBytesAsync(path);
+
+            string result = JsonSerializer.Serialize(b, _option);
+            
+
+            return result;
         }
 
-        public async Task<string> GetAllApartmentPhotoAsync(int id, string route)
+        public string GetAllAgentPhoto(string route)
         {
-            // You can use your own method over here.
-            // byte[] b = System.IO.File.ReadAllBytes();   // You can use your own method over here.
+            string path = currentDirectory + $"\\AgentPhoto\\";
             List<string> paths = new List<string>();
-
-            DirectoryInfo directoryInfo = new DirectoryInfo(currentDirectory + $"{id}\\");
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            if (!directoryInfo.Exists)
+            {
+                return "Invalid id";
+            }
             foreach (var item in directoryInfo.GetFiles())
             {
                 paths.Add(route + item.Name /*+ Path.GetFileNameWithoutExtension(item.Name)*/);
             }
-            string resalt = JsonSerializer.Serialize(paths, new JsonSerializerOptions()
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true
-            });
+            string resalt = JsonSerializer.Serialize(paths, _option);
             return resalt;
+        }
+
+        public string GetAllApartmentPhoto(int id, string route)
+        {
+            List<string> paths = new List<string>();
+            string path = currentDirectory + $"\\ObjectPhoto\\{id}\\";
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            if (!directoryInfo.Exists)
+            {
+                return "Invalid id";
+            }
+            foreach (var item in directoryInfo.GetFiles())
+            {
+                paths.Add(route + item.Name /*+ Path.GetFileNameWithoutExtension(item.Name)*/);
+            }
+            string resalt =  JsonSerializer.Serialize(paths,_option);
+            return  resalt;
             //нужно отправлять json с массивом ссылок на апи со скачиванием фото
         }
 
-        public async Task<string> GetPhotoAsync(string id)
+        public async Task<string> GetApartmentPhotoByIdAsync(string id)
         {
-            try
+            //string contentType = "image/jpeg";
+            if (id == string.Empty)
             {
-                string[] s = id.Split('-', StringSplitOptions.RemoveEmptyEntries);
-                byte[] b = System.IO.File.ReadAllBytes(currentDirectory + s[0] + "\\" + id);
-                string result = JsonSerializer.Serialize(b);
-                return result;
+                return "Invalid id";
             }
-            catch (Exception ex)
+            string[] s = id.Split('-', StringSplitOptions.RemoveEmptyEntries);
+            string path = currentDirectory + $"\\ObjectPhoto\\" + s[0] + "\\" + id;
+            if (!File.Exists(path))
             {
-                return ex.Message;
+                return "Indvid id";
             }
+            byte[] b = await System.IO.File.ReadAllBytesAsync(path);
+
+            string result = JsonSerializer.Serialize(b,_option);
+
+            //System.Drawing.Image ImageFromFile = System.Drawing.Image.FromFile(currentDirectory + s[0] + "\\" + id);
+            //Bitmap bmp = new Bitmap(ImageFromFile);//Bitmap конвертирую в массив байтов
+            //ImageConverter converter = new ImageConverter();
+            //byte[] ImageInArray = (byte[])converter.ConvertTo(bmp, typeof(byte[]));              
+            //string result = JsonSerializer.Serialize(ImageInArray);
+
+            //   Results.File(b, contentType, id);
+
+            return result;
         }
     }
 }

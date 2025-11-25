@@ -5,6 +5,7 @@ using ProjectAPI.Model;
 using ProjectAPI.Repositories;
 using ProjectAPI.Services;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjectAPI.Controllers
 {
@@ -14,10 +15,12 @@ namespace ProjectAPI.Controllers
     {
         private readonly IApartmentServices _apartmentServices;
         private readonly IPhotoServices _photoServices;
-        public ApartmentController(IApartmentServices apartmentServices, IPhotoServices photoServices)
+        private readonly IConfiguration _configuration;
+        public ApartmentController(IConfiguration configuration,IApartmentServices apartmentServices, IPhotoServices photoServices)
         {
             _apartmentServices = apartmentServices;
             _photoServices = photoServices;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -78,16 +81,14 @@ namespace ProjectAPI.Controllers
         {
             //List<ApartmentDTO> apartments = new List<ApartmentDTO>();
             string response = await _apartmentServices.GetAll(brandNew);
-
             return response;
         }
 
         [HttpGet]
         [Route("GetById")]
-        public async Task<ApartmentDTO> GetByIdAsync(int id)
+        public async Task<string> GetByIdAsync(int id)
         {
-            ApartmentDTO apartments = new ApartmentDTO();
-            // apartments = await _apartmentRepository.GetById(id);
+            string apartments  = await _apartmentServices.GetById(id);
             return apartments;
         }
 
@@ -105,21 +106,21 @@ namespace ProjectAPI.Controllers
 
         [HttpGet]
         [Route("GetAllApartmentPhoto")]
-        public async Task<string> GetAllApartmentPhotoAsync(int id)
+        public string GetAllApartmentPhoto(int id)
         {
-            return await _photoServices.GetAllApartmentPhotoAsync(id, "/api/Apartment/GetApartmentPhoto?id=");
-            //return @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=1068-1";
+            string? route = _configuration.GetRequiredSection("PhotoRoute").GetSection("Apartment").Value; /*?? "Invalid route"*/
+            return  _photoServices.GetAllApartmentPhoto(id,route);
         }
 
         [HttpGet]
         [Route("GetApartmentPhoto")]
-        public async Task<string> GetPhotoAsync(string id="")
+        public async Task<string> GetApartmentPhotoAsync(string id="")
         {
             if (string.Empty == id)
             {
                 return "Invalid id";
             }
-            string result = await _photoServices.GetPhotoAsync(id);
+            string result = await _photoServices.GetApartmentPhotoByIdAsync(id);
             return result;
         }
     }

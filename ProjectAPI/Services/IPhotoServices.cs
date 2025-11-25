@@ -4,8 +4,9 @@ namespace ProjectAPI.Services
 {
     public interface IPhotoServices
     {
-        Task<string> GetAgentPhotoAsync(AgentDTO agent);
-        Task<string> GetAllApartmentPhotoAsync(int id, string route);
-        Task<string> GetPhotoAsync(string id);
+        string GetAllAgentPhoto(string route);
+        string GetAllApartmentPhoto(int id, string route);
+        Task<string> GetApartmentPhotoByIdAsync(string id);
+        Task<string> GetAgentPhotoByIdAsync(string id);
     }
 }

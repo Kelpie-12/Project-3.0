@@ -2,7 +2,9 @@
 {
     public interface IAgentServices
     {
-        Task<string> GetAll(bool archive);
-        Task<string> GetByAgentId(int id);
+        Task<string> GetAllAsync(bool archive);
+        Task<string> GetByAgentIdAsync(int id);
+        Task<string> GetAgentPhotoByIdAsync(string id);
+        string GetAllAgentPhoto();
     }
 }

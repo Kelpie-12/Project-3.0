@@ -1,6 +1,7 @@
 ﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Microsoft.VisualBasic;
 using ProjectAPI.Model.DTO;
 using ProjectAPI.Repositories;
 
@@ -21,10 +22,16 @@ namespace ProjectAPI.Services.Implementations
         }
         public async Task<string> GetAll(bool @new)
         {
-            List<ApartmentDTO> apartments = new List<ApartmentDTO>();
-            apartments = await _apartmentRepository.GetAll(@new);
+            List<ApartmentDTO>? apartments = await _apartmentRepository.GetAll(@new);
             string json = JsonSerializer.Serialize(apartments, options);
             return json;
+        }
+
+        public async Task<string> GetById(int id)
+        {
+            ApartmentDTO? apartment = await _apartmentRepository.GetById(id);
+            string res= JsonSerializer.Serialize(apartment, options);
+            return res;
         }
 
         public async Task<string> GetTop()

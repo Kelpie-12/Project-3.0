@@ -152,12 +152,8 @@ namespace Project_3._0.Data.Repositories.Implementations
                                 Description = new Description()
                                 {
                                     Title = reader.GetString(12),
-                                    Paragraph_1 = reader.GetString(13),
-                                    Paragraph_2 = reader.GetString(14),
-                                    Paragraph_3 = reader.GetString(15)
-                                },
-                                PathPhoto=reader.GetString(16)
-                                
+                                    Paragrahs = DescriptionSplit(reader.GetString(13))
+                                }
                             };
                         }
                     }
@@ -185,7 +181,16 @@ namespace Project_3._0.Data.Repositories.Implementations
             }
             return apartment;
         }
-
+        private IList<string> DescriptionSplit(string text)
+        {
+            IList<string> res = new List<string>();
+            var a = text.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string item in a)
+            {
+                res.Add(item);
+            }
+            return res;
+        }
         public List<Apartment> GetTop()
         {
             List<Apartment> apartments = new List<Apartment>();

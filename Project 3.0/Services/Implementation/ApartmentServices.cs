@@ -18,6 +18,8 @@ namespace Project_3._0.Services.Implementation
         {
             HttpClient client = _clientFactory.CreateClient("Apartment");
             List<Apartment> apartment = await client.GetFromJsonAsync<List<Apartment>>($"GetAll?brandNew={brandNew}");
+
+
             foreach (Apartment item in apartment)
             {
                 item.Photo = _photoServices.GetPhotos(item.PathPhoto);
@@ -33,7 +35,13 @@ namespace Project_3._0.Services.Implementation
         public async Task<Apartment?> GetById(int id)
         {
             HttpClient client = _clientFactory.CreateClient("Apartment");
-            Apartment apartment = await client.GetFromJsonAsync<Apartment>($"GetById?id={id}");
+            Apartment? apartment = await client.GetFromJsonAsync<Apartment>($"GetById?id={id}");
+            apartment.Img = new List<byte[]>();
+            IList<string> photoRoute = await _photoServices.GetAllApartmentPhoto(apartment.Id.ToString());
+            foreach (var item in photoRoute)
+            {              
+                apartment.Img.Add(await _photoServices.GetApartmentPhotoByIdAsync(item));
+            }
 
             apartment.Photo = _photoServices.GetPhotos(apartment.PathPhoto);
             Console.WriteLine($"Apartment: id={apartment.Id}, {apartment.Street}");

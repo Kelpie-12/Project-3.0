@@ -9,7 +9,7 @@ namespace ProjectAPI.Repositories.Implementations
         public ApartmentRepository(IConfiguration configuration) : base(configuration)
         {
 
-        }           
+        }
 
         public async Task<List<ApartmentDTO>> GetAll(bool brandNew)
         {
@@ -46,21 +46,19 @@ namespace ProjectAPI.Repositories.Implementations
                                 AreaHouse = reader.GetInt32(9),
                                 Rooms = reader.GetInt32(10),
                                 Price = reader.GetDecimal(11),
-                                PathPhoto = reader.GetString(12),                              
+                                PathPhoto = reader.GetString(12),
                                 Description = new Description()
                                 {
                                     Title = reader.GetString(13),
-                                    Paragraph_1 = reader.GetString(14),
-                                    Paragraph_2 = reader.GetString(15),
-                                    Paragraph_3 = reader.GetString(16)
+                                    Paragrahs = DescriptionSplit(reader.GetString(14))
                                 }
                             };
-                           // apartment.Photo = new List<Photo>();
+                            // apartment.Photo = new List<Photo>();
                             apartments.Add(apartment);
                         }
                     }
                     reader.Close();
-                }            
+                }
             }
             return apartments;
         }
@@ -85,6 +83,7 @@ namespace ProjectAPI.Repositories.Implementations
                     {
                         while (reader.Read())
                         {
+
                             apartment = new ApartmentDTO()
                             {
                                 Id = reader.GetInt32(0),
@@ -98,25 +97,32 @@ namespace ProjectAPI.Repositories.Implementations
                                 Floor = reader.GetInt32(8),
                                 AreaHouse = reader.GetInt32(9),
                                 Rooms = reader.GetInt32(10),
-                                Price = reader.GetDecimal(11),                              
+                                Price = reader.GetDecimal(11),
                                 Description = new Description()
                                 {
-                                    Title = reader.GetString(12),
-                                    Paragraph_1 = reader.GetString(13),
-                                    Paragraph_2 = reader.GetString(14),
-                                    Paragraph_3 = reader.GetString(15)
-                                },
-                                PathPhoto = reader.GetString(16)
+                                    Title = reader.GetString(12),                                   
+                                    Paragrahs = DescriptionSplit(reader.GetString(13))
+                                }                              
                             };
                         }
                     }
                     reader.Close();
 
-                }        
+                }
             }
             return apartment;
         }
 
+        private IList<string> DescriptionSplit(string text)
+        {
+            IList<string> res = new List<string>();
+            var a = text.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string item in a)
+            {
+                res.Add(item);
+            }
+            return res;
+        }
         public async Task<List<ApartmentDTO>> GetTop()
         {
             List<ApartmentDTO> apartments = new List<ApartmentDTO>();
@@ -134,7 +140,7 @@ namespace ProjectAPI.Repositories.Implementations
                     cmd.Parameters.Add(new SqlParameter("@offer", 1));
 
                     //cmd.CommandText = "use Store  select Products.Id as \'Идентификатор\',Products.[Name] as \'Название продукта\',Products.Price as \'Цена\' ,Products.[Description] as \'Описание\' from Products;";
-                    SqlDataReader reader =await cmd.ExecuteReaderAsync();
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
                         while (reader.Read())
@@ -161,7 +167,7 @@ namespace ProjectAPI.Repositories.Implementations
                         }
                     }
                     reader.Close();
-                }             
+                }
             }
 
             return apartments;
@@ -191,13 +197,11 @@ namespace ProjectAPI.Repositories.Implementations
                     cmd.Parameters.AddWithValue("@price", aprt.Price);
                     cmd.Parameters.AddWithValue("@brandNew", aprt.BrandNew);
                     cmd.Parameters.AddWithValue("@title", aprt.Description.Title);
-                    cmd.Parameters.AddWithValue("@p_1", aprt.Description.Paragraph_1);
-                    cmd.Parameters.AddWithValue("@p_2", aprt.Description.Paragraph_2);
-                    cmd.Parameters.AddWithValue("@p_3", aprt.Description.Paragraph_3);
+                    cmd.Parameters.AddWithValue("@p", aprt.Description.Paragrahs);               
 
-                    cmd.Parameters.Add("@photo_id", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+                  //  cmd.Parameters.Add("@photo_id", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
                     cmd.ExecuteNonQuery();
-                    int id = Convert.ToInt32(cmd.Parameters["@photo_id"].Value);
+                    int id = -1;// Convert.ToInt32(cmd.Parameters["@photo_id"].Value);
                     conn.Close();
                     return id;
 

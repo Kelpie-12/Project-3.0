@@ -9,27 +9,30 @@ namespace TestAPI
     public partial class Form1 : Form
     {
         static HttpClient httpClient = new HttpClient();
+        string _apiLink = @"http://localhost:5190";
         public Form1()
         {
             InitializeComponent();
+
         }
 
-        private  void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            b();
+            b(Convert.ToInt32(textBox1.Text));
         }
-        private async Task b()
+        private async Task<List<string>> b(int id)
         {
-            string url = @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=123";
+            //string url = @$"{_apiLink}/api/Apartment/GetAllApartmentPhoto?id={id}";// @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=1068";
+            string url = @$"{_apiLink}/api/Agent/GetAllAgentPhoto";// @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=1068";
             Uri uri = null;
             Uri.TryCreate(url, UriKind.Absolute, out uri);
             if (string.IsNullOrEmpty(url))
             {
-                return;
+                return new List<string>();
             }
-            using var response = await httpClient.GetAsync(uri);
-            var r = response.Content.ReadFromJsonAsync<MultipartFormDataContent>();
-
+            using var response = await httpClient.GetAsync(uri);          
+            List<string>? a = response.Content.ReadFromJsonAsync<List<string>>().Result;
+            //label1.Text = a[0];
             /*using (OpenFileDialog dlg = new OpenFileDialog { CheckFileExists = true })
             //{
             //    if (dlg.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dlg.FileName))
@@ -85,12 +88,14 @@ namespace TestAPI
             //    }
                 }
             */
-            return;
+            return a;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            try
+            G();
+
+            /*try
             {
                 using (SqlConnection con = new SqlConnection("Data Source=158.160.0.70:1433;User ID=kelpie;Password=R#529440x!);Integrated Security=True;Connect Timeout=30;Encrypt=True;Trusted_Connection=true;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Initial Catalog=ComopanyProgect"))
                 {
@@ -107,24 +112,49 @@ namespace TestAPI
             {
                 MessageBox.Show(ex.Message);
             }
-            //string url = "https://localhost:7286/api/Values/Ping/1";
-            //Uri uri = null;
-            //Uri.TryCreate(url, UriKind.Absolute, out uri);
-            //if (string.IsNullOrEmpty(url))
-            //{
-            //    return;
-            //}
-            //HttpClient httpClient = new HttpClient();
-            //using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
-            //using HttpResponseMessage response =  httpClient.Send(request);
-            //foreach (var header in response.Headers)
-            //{
-            //    Console.Write($"{header.Key}:");
-            //    foreach (var headerValue in header.Value)
-            //    {
-            //        textBox1.Text+=(headerValue);
-            //    }
-            //}
+            string url = "https://localhost:7286/api/Values/Ping/1";
+            Uri uri = null;
+            Uri.TryCreate(url, UriKind.Absolute, out uri);
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+            HttpClient httpClient = new HttpClient();
+            using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri);
+            using HttpResponseMessage response = httpClient.Send(request);
+            foreach (var header in response.Headers)
+            {
+                Console.Write($"{header.Key}:");
+                foreach (var headerValue in header.Value)
+                {
+                    textBox1.Text += (headerValue);
+                }
+            }*/
+        }
+
+        private async Task G()
+        {
+            List<string> res = await b(Convert.ToInt32(textBox1.Text));
+            await GetPhoto(res[0]);
+        }
+        private async Task GetPhoto(string apiPath)
+        {
+            string url = @$"{_apiLink}{apiPath}";// @"http://localhost:5190/api/Apartment/GetApartmentPhoto?id=1068";
+            Uri uri = null;
+            Uri.TryCreate(url, UriKind.Absolute, out uri);
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+            using var response = await httpClient.GetAsync(uri);
+            var r = response.Content.ReadFromJsonAsync<byte[]>().Result;
+            
+            MemoryStream ms = new MemoryStream(r);
+
+            System.Drawing.Image returnImage = System.Drawing.Image.FromStream(ms);
+
+            pictureBox1.Image = returnImage;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
         }
     }
 }
